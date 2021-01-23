@@ -1,13 +1,15 @@
 [common]
-server_name = edge_device_manager
-version = 1.0.0
+server_name = video_storage
+version = 0.0.1
 socket_file = /tmp/edge_device_manager.socket
 log_path = G:/
 log_level = debug
 
 [backend]
-server_host = 11.23.5.1
+server_host = 127.0.0.1
 port = 10800
 
 [logic]
 software_warehouse = /usr/local/apps/leechbox
+
+[db]
