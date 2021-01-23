@@ -7,6 +7,7 @@ require (
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/kr/pretty v0.2.1 // indirect
+	github.com/mattn/go-sqlite3 v1.14.4
 	github.com/shirou/gopsutil v3.20.10+incompatible
 	github.com/sirupsen/logrus v1.7.0
 	github.com/smartystreets/goconvey v1.6.4 // indirect

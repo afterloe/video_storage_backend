@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"video_storage/config"
+	"video_storage/sdk"
 	"video_storage/tools"
 )
 
@@ -40,6 +41,8 @@ author:\tafterloe(605728727@qq.com)
 		logrus.SetOutput(os.Stdout)
 		logrus.Error("日志写入失败， 输出到默认输出源")
 	}
+
+	sdk.Init(config.Instance.Logic.SQLiteFile)
 }
 
 func main() {
