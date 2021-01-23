@@ -1,0 +1,13 @@
+[common]
+server_name = edge_device_manager
+version = 1.0.0
+socket_file = /tmp/edge_device_manager.socket
+log_path = G:/
+log_level = debug
+
+[backend]
+server_host = 11.23.5.1
+port = 10800
+
+[logic]
+software_warehouse = /usr/local/apps/leechbox
