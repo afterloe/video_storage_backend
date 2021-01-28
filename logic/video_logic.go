@@ -4,7 +4,7 @@ type videoLogic struct {
 
 }
 
-func (*videoLogic) FindVideoByTarget() map[string]interface{} {
+func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
 	// TODO
 	return nil
 }

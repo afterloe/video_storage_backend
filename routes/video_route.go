@@ -19,5 +19,5 @@ func (that *VideoRoute) GetList() *model.ResponseBody {
 	if page < 0 {
 		page = 0
 	}
-	return tools.Success(logic.VideoLogic.FindVideoByTarget(videoType, count, page))
+	return tools.Success(logic.VideoLogic.FindVideoByTarget(videoType, page, count))
 }

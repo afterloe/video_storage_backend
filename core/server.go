@@ -63,6 +63,7 @@ func configCoreServer() {
 	// 公用路由
 	mvc.Configure(instance.Party("/"), func(pub *mvc.Application) {
 		pub.Party("/").Handle(new(routes.PubRoute))
+		pub.Party("/dictionary").Handle(new(routes.DictionaryRoute))
 	})
 
 	// 鉴权 api
