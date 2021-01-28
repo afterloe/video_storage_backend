@@ -97,6 +97,7 @@ func (*sqliteSDK) ResultToModel(columns []string, value interface{}) []interface
 			}
 		}
 	}
+
 	return desc
 }
 
