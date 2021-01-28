@@ -78,7 +78,6 @@ func signalListener(server *http.Server) {
 	go func() {
 		code := <-pkg
 		logrus.Infof("得到信号 [%s], 即将退出服务", code)
-		repositories.MemoryStorageRepository.SaveStatus()
 		logrus.Info("服务关闭")
 		sdk.CloseALLLink()
 		os.Exit(0)
@@ -108,4 +107,8 @@ func StartUpHttpServer() {
 		logrus.Error(err)
 		os.Exit(-2)
 	}
+}
+
+func LoadMemoryStatus() {
+	repositories.MemoryStorageRepository.LoadStatusFile()
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"video_storage/model"
 	"video_storage/tools"
 )
 
@@ -14,17 +15,38 @@ var storage = make(map[string]map[string]interface{})
 
 const (
 	UserCacheDataType = "user"
+	fileName = "./.memoryStorage"
 )
 
 type memoryStorageRepository struct {
 }
 
+func (*memoryStorageRepository) LoadStatusFile () {
+	content := tools.ReadFileAsString(fileName)
+	if "" == content {
+		return
+	}
+	var a map[string]interface{}
+	json.Unmarshal([]byte(content), &a)
+	for dataType, instance := range a {
+		if UserCacheDataType == dataType {
+			storage[UserCacheDataType] = make(map[string]interface{})
+			for k, v := range instance.(map[string]interface{}) {
+				var user model.User
+				tools.InterfaceTransformation(v, &user)
+				storage[UserCacheDataType][k] = &user
+			}
+		}
+	}
+}
+
 func (*memoryStorageRepository) SaveStatus() {
-	fileName := "./.memoryStorage"
+
 	os.Remove(fileName)
-	os.Create(fileName)
+	file, _ := os.Create(fileName)
+	defer file.Close()
 	json, _ := json.Marshal(storage)
-	ioutil.WriteFile("fileName", json, 0666)
+	ioutil.WriteFile(fileName, json, 0666)
 }
 
 func (*memoryStorageRepository) Del(dataType string, key string) {

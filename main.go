@@ -48,5 +48,6 @@ author:\tafterloe(605728727@qq.com)
 
 func main() {
 	// 启动application
+	core.LoadMemoryStatus()
 	core.StartUpHttpServer()
 }
