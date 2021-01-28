@@ -5,9 +5,7 @@ import (
 	"sync"
 )
 
-var (
-	SQLiteSDK sqliteSDK
-)
+var SQLiteSDK sqliteSDK
 
 func Init(sqliteFile string) {
 	var once sync.Once

@@ -16,6 +16,7 @@ import (
 	"video_storage/config"
 	"video_storage/model"
 	"video_storage/routes"
+	"video_storage/sdk"
 	"video_storage/tools"
 )
 
@@ -77,6 +78,7 @@ func signalListener(server *http.Server) {
 		code := <-pkg
 		logrus.Infof("得到信号 [%s], 即将退出服务", code)
 		logrus.Info("服务关闭")
+		sdk.CloseALLLink()
 		os.Exit(0)
 	}()
 }
