@@ -63,12 +63,14 @@ func configCoreServer() {
 	// 公用路由
 	mvc.Configure(instance.Party("/"), func(pub *mvc.Application) {
 		pub.Party("/").Handle(new(routes.PubRoute))
+		pub.Party("/dictionary").Handle(new(routes.DictionaryRoute))
 	})
 
 	// 鉴权 api
 	mvc.Configure(instance.Party("/aip"), func(aip *mvc.Application) {
 		aip.Router.Use(logic.AuthLogic)
 		aip.Party("/user").Handle(new(routes.UserRoute))
+		aip.Party("/video").Handle(new(routes.VideoRoute))
 	})
 }
 
@@ -79,7 +81,7 @@ func signalListener(server *http.Server) {
 		code := <-pkg
 		logrus.Infof("得到信号 [%s], 即将退出服务", code)
 		logrus.Info("服务关闭")
-		sdk.CloseALLLink()
+		_ = sdk.CloseALLLink()
 		os.Exit(0)
 	}()
 }

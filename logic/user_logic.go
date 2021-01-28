@@ -8,11 +8,7 @@ import (
 	"video_storage/tools"
 )
 
-var UserLogic = newUserLogic()
 
-func newUserLogic() *userLogic {
-	return &userLogic{}
-}
 
 type userLogic struct {
 }
@@ -52,4 +48,8 @@ func (*userLogic) CheckLoginStatus(uid int64) (string, error) {
 		}
 	}
 	return "", nil
+}
+
+func (*userLogic) Cancellation(token string)  {
+	repositories.MemoryStorageRepository.Del("user", token)
 }

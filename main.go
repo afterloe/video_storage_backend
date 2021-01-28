@@ -7,6 +7,7 @@ import (
 	"os"
 	"video_storage/config"
 	"video_storage/core"
+	"video_storage/repositories"
 	"video_storage/sdk"
 	"video_storage/tools"
 )
@@ -44,6 +45,7 @@ author:\tafterloe(605728727@qq.com)
 	}
 
 	sdk.Init(config.Instance.Logic.SQLiteFile)
+	repositories.Init()
 }
 
 func main() {
