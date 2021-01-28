@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"strings"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
@@ -27,6 +28,8 @@ func (that *userRecordRepository) SignUp(email, passwd string) (*model.User, err
 	} else {
 		user.Mail = email
 		user.Passwd = tools.MD5(email + passwd)
+		user.Nickname = strings.Split(email, "@")[0]
+		user.Avatar = "anyOne.png"
 		err = that.InsertOne(user)
 	}
 	return user, err
@@ -35,7 +38,7 @@ func (that *userRecordRepository) SignUp(email, passwd string) (*model.User, err
 func (*userRecordRepository) InsertOne(user *model.User) error {
 	//mail, pwd, nickname, avatar, create_time, modify_time, is_del
 	createTime := tools.GetTime()
-	args := []interface{}{user.Mail, user.Passwd, user.Mail, "", createTime, createTime, false}
+	args := []interface{}{user.Mail, user.Passwd, user.Nickname, user.Avatar, createTime, createTime, false}
 	var err error
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
 		id, _ := result.LastInsertId()
