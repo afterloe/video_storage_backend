@@ -21,14 +21,27 @@ func (*PubRoute) GetVersion() *model.ResponseBody {
 func (that *PubRoute) PostSignUp() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
-	if err := repositories.UserRecordRepository.SignIn(email, password); nil != err {
+	if "" == email {
+		return tools.Failed(400, "email 不能为空")
+	}
+	if user, err := repositories.UserRecordRepository.SignUp(email, password); nil != err {
 		return tools.Failed(400, err.Error())
 	} else {
-		return tools.Success(nil)
+		return tools.Success(user)
 	}
 }
 
 // 登陆
-func (*PubRoute) PutSignIn() *model.ResponseBody {
-	return tools.Success(nil)
+func (that *PubRoute) PutSignIn() *model.ResponseBody {
+	email := tools.FormValue(that.Ctx, "email")
+	password := tools.FormValue(that.Ctx, "password")
+	if "" == email {
+		return tools.Failed(400, "email 不能为空")
+	}
+	if user, err := repositories.UserRecordRepository.SignIn(email, password); nil != err {
+		return tools.Failed(400, err.Error())
+	} else {
+		token := repositories.MemoryStorageRepository.Set("user", user)
+		return tools.Success(token)
+	}
 }

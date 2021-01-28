@@ -20,6 +20,18 @@ func (*userRecordRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (that *userRecordRepository) SignIn(email, passwd string) (*model.User, error) {
+	user := that.FindUserByPwd(email, tools.MD5(email + passwd))
+	var err error
+	if 0 == user.ID {
+		err = errors.New("账号密码错误")
+	}
+	if true == user.IsDel {
+		err = errors.New("该账号已被冻结")
+	}
+	return user, err
+}
+
 func (that *userRecordRepository) SignUp(email, passwd string) (*model.User, error) {
 	user := that.FindUserByEmail(email)
 	var err error
@@ -33,6 +45,15 @@ func (that *userRecordRepository) SignUp(email, passwd string) (*model.User, err
 		err = that.InsertOne(user)
 	}
 	return user, err
+}
+
+func (*userRecordRepository) FindUserByPwd(email, passwd string) *model.User {
+	args := []interface{}{email, passwd}
+	user := model.User{}
+	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
+		row.Scan(&user.ID, &user.IsDel)
+	}, constants.SignIn, args...)
+	return &user
 }
 
 func (*userRecordRepository) InsertOne(user *model.User) error {
