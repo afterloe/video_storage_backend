@@ -16,7 +16,21 @@ func initSQL() {
 	}
 }
 
-func TestSinUp(t *testing.T) {
+func TestSignIn(t *testing.T) {
+	initSQL()
+	const (
+		email = "605728727@qq.com"
+		passwd = "11111111"
+	)
+	user, err := repositories.UserRecordRepository.SignIn(email, passwd)
+	if nil != err {
+		t.Error(err)
+		return
+	}
+	t.Log(user)
+}
+
+func TestSignUp(t *testing.T) {
 	initSQL()
 	const (
 		email = "605728727@qq.com"
