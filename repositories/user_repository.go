@@ -43,7 +43,7 @@ func (*userRecordRepository) FindUserByPwd(email, passwd string) *model.User {
 	args := []interface{}{email, passwd}
 	user := model.User{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
-		row.Scan(&user.ID, &user.IsDel)
+		row.Scan(&user.ID, &user.Mail, &user.Nickname, &user.Avatar, &user.IsDel)
 	}, constants.SignIn, args...)
 	return &user
 }
@@ -68,7 +68,7 @@ func (*userRecordRepository) FindUserByEmail(email string) *model.User {
 	args := []interface{}{email}
 	var user = model.User{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
-		row.Scan(&user.ID, &user.Mail, &user.IsDel)
+		_ = row.Scan(&user.ID, &user.Mail, &user.IsDel)
 	}, constants.FindUserByEmail, args...)
 	return &user
 }

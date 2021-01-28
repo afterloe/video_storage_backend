@@ -48,5 +48,5 @@ func (that *PubRoute) PostSignin() *model.ResponseBody {
 		repositories.MemoryStorageRepository.Del("user", token)
 	}
 	token = repositories.MemoryStorageRepository.Set("user", user)
-	return tools.Success(token)
+	return tools.Success(map[string]interface{}{"token": token, "user": user})
 }
