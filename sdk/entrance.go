@@ -5,14 +5,12 @@ import (
 	"sync"
 )
 
-var (
-	SQLiteSDK sqliteSDK
-)
+var SQLiteSDK sqliteSDK
 
 func Init(sqliteFile string) {
 	var once sync.Once
 	once.Do(func() {
-		logrus.Info("SDK初始化， 加载license文件")
+		logrus.Info("SDK初始化")
 
 		// sqlite sdk
 		sqlSDK, _ := initSQLiteSDK(sqliteFile)

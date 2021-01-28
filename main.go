@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"video_storage/config"
+	"video_storage/core"
 	"video_storage/sdk"
 	"video_storage/tools"
 )
@@ -47,5 +48,6 @@ author:\tafterloe(605728727@qq.com)
 
 func main() {
 	// 启动application
-
+	core.LoadMemoryStatus()
+	core.StartUpHttpServer()
 }

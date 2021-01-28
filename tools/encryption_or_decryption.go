@@ -3,10 +3,18 @@ package tools
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/md5"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 )
+
+func MD5(text string) string {
+	binary := []byte(text)
+	hasText := md5.Sum(binary)
+	cipherText := fmt.Sprintf("%x", hasText) //将[]byte转成16进制
+	return cipherText
+}
 
 // AES GCM 加密
 func Encrypt(key, text string) (string, error) {
@@ -49,4 +57,3 @@ func Sha256Hex(content string) string {
 	data := hex.EncodeToString(c)
 	return data
 }
-
