@@ -53,3 +53,7 @@ func (*userLogic) CheckLoginStatus(uid int64) (string, error) {
 	}
 	return "", nil
 }
+
+func (*userLogic) Cancellation(token string)  {
+	repositories.MemoryStorageRepository.Del("user", token)
+}

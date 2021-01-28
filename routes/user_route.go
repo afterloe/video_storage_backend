@@ -19,3 +19,8 @@ func (that *UserRoute) GetMe() *model.ResponseBody {
 func (that *UserRoute) GetPing() *model.ResponseBody {
 	return tools.Success(nil)
 }
+
+func (that *UserRoute) DeleteCancellation() *model.ResponseBody {
+	logic.UserLogic.Cancellation(that.Ctx.Values().Get("token").(string))
+	return tools.Success(nil)
+}
