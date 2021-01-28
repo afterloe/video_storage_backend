@@ -8,11 +8,7 @@ import (
 	"video_storage/tools"
 )
 
-var UserLogic = newUserLogic()
 
-func newUserLogic() *userLogic {
-	return &userLogic{}
-}
 
 type userLogic struct {
 }
