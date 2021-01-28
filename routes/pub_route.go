@@ -39,10 +39,14 @@ func (that *PubRoute) PostSignin() *model.ResponseBody {
 	if "" == email {
 		return tools.Failed(400, "email 不能为空")
 	}
-	if user, err := logic.UserLogic.SignIn(email, password); nil != err {
+	user, err := logic.UserLogic.SignIn(email, password)
+	if nil != err {
 		return tools.Failed(400, err.Error())
-	} else {
-		token := repositories.MemoryStorageRepository.Set("user", user)
-		return tools.Success(token)
 	}
+	token, err := logic.UserLogic.CheckLoginStatus(user.ID)
+	if nil != err {
+		repositories.MemoryStorageRepository.Del("user", token)
+	}
+	token = repositories.MemoryStorageRepository.Set("user", user)
+	return tools.Success(token)
 }

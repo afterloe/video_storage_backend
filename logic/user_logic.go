@@ -43,3 +43,13 @@ func (*userLogic) SignUp(email, passwd string) (*model.User, error) {
 	}
 	return user, err
 }
+
+func (*userLogic) CheckLoginStatus(uid int64) (string, error) {
+	group := repositories.MemoryStorageRepository.GetAllTypeValue("user")
+	for token, v := range group {
+		if v.(*model.User).ID == uid {
+			return token, errors.New("当前账号已登陆")
+		}
+	}
+	return "", nil
+}
