@@ -79,7 +79,7 @@ func signalListener(server *http.Server) {
 		code := <-pkg
 		logrus.Infof("得到信号 [%s], 即将退出服务", code)
 		logrus.Info("服务关闭")
-		sdk.CloseALLLink()
+		_ = sdk.CloseALLLink()
 		os.Exit(0)
 	}()
 }
