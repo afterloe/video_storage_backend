@@ -9,6 +9,4 @@
 # mac os file
 .DS_Store
 node_modules
-
-# ekho-resource
-ekho-resource
+.memoryStorage
