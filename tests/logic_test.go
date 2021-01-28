@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+	"video_storage/logic"
 	"video_storage/repositories"
 	"video_storage/sdk"
 )
@@ -22,7 +23,7 @@ func TestSignIn(t *testing.T) {
 		email = "605728727@qq.com"
 		passwd = "11111111"
 	)
-	user, err := repositories.UserRecordRepository.SignIn(email, passwd)
+	user, err := logic.UserLogic.SignIn(email, passwd)
 	if nil != err {
 		t.Error(err)
 		return
@@ -36,7 +37,7 @@ func TestSignUp(t *testing.T) {
 		email = "605728727@qq.com"
 		passwd = "11111111"
 	)
-	user, err := repositories.UserRecordRepository.SignUp(email, passwd)
+	user, err := logic.UserLogic.SignUp(email, passwd)
 	if nil != err {
 		t.Error(err)
 		return

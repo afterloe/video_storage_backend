@@ -3,7 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"strings"
+	"github.com/sirupsen/logrus"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
@@ -20,31 +20,23 @@ func (*userRecordRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
-func (that *userRecordRepository) SignIn(email, passwd string) (*model.User, error) {
-	user := that.FindUserByPwd(email, tools.MD5(email + passwd))
+func (*userRecordRepository) FindByID(uid interface{}) *model.User {
+	args := []interface{}{uid}
 	var err error
-	if 0 == user.ID {
-		err = errors.New("账号密码错误")
-	}
-	if true == user.IsDel {
-		err = errors.New("该账号已被冻结")
-	}
-	return user, err
-}
-
-func (that *userRecordRepository) SignUp(email, passwd string) (*model.User, error) {
-	user := that.FindUserByEmail(email)
-	var err error
-	if "" != user.Mail {
-		err = errors.New("该账号已被注册")
-	} else {
-		user.Mail = email
-		user.Passwd = tools.MD5(email + passwd)
-		user.Nickname = strings.Split(email, "@")[0]
-		user.Avatar = "anyOne.png"
-		err = that.InsertOne(user)
-	}
-	return user, err
+	user := model.User{}
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		if !rows.Next() {
+			err = errors.New("查询无此结果")
+			return
+		}
+		columns, _ := rows.Columns()
+		err := rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, &user)...)
+		if nil != err {
+			logrus.Debug(err)
+			logrus.Debug("解构失败.")
+		}
+	}, constants.FindByID, args...)
+	return &user
 }
 
 func (*userRecordRepository) FindUserByPwd(email, passwd string) *model.User {

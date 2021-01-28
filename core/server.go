@@ -14,6 +14,7 @@ import (
 	"strings"
 	"syscall"
 	"video_storage/config"
+	"video_storage/logic"
 	"video_storage/model"
 	"video_storage/routes"
 	"video_storage/sdk"
@@ -62,13 +63,12 @@ func configCoreServer() {
 	mvc.Configure(instance.Party("/"), func(pub *mvc.Application) {
 		pub.Party("/").Handle(new(routes.PubRoute))
 	})
-	//
-	//// 鉴权 api
-	//mvc.Configure(instance.Party("/aip"), func(aip *mvc.Application) {
-	//	aip.Router.Use(logic.AuthLogic)
-	//	aip.Party("/device").Handle(new(routes.DeviceRoute))
-	//	aip.Party("/app/{name:string}").Handle(new(routes.AppRoute))
-	//})
+
+	// 鉴权 api
+	mvc.Configure(instance.Party("/aip"), func(aip *mvc.Application) {
+		aip.Router.Use(logic.AuthLogic)
+		aip.Party("/user").Handle(new(routes.UserRoute))
+	})
 }
 
 func signalListener(server *http.Server) {

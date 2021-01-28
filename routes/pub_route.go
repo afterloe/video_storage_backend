@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/kataras/iris/v12"
 	"video_storage/config"
+	"video_storage/logic"
 	"video_storage/model"
 	"video_storage/repositories"
 	"video_storage/tools"
@@ -18,13 +19,13 @@ func (*PubRoute) GetVersion() *model.ResponseBody {
 }
 
 // 注册
-func (that *PubRoute) PostSignUp() *model.ResponseBody {
+func (that *PubRoute) PutSignUp() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
 	if "" == email {
 		return tools.Failed(400, "email 不能为空")
 	}
-	if user, err := repositories.UserRecordRepository.SignUp(email, password); nil != err {
+	if user, err := logic.UserLogic.SignUp(email, password); nil != err {
 		return tools.Failed(400, err.Error())
 	} else {
 		return tools.Success(user)
@@ -32,13 +33,13 @@ func (that *PubRoute) PostSignUp() *model.ResponseBody {
 }
 
 // 登陆
-func (that *PubRoute) PutSignIn() *model.ResponseBody {
+func (that *PubRoute) PostSignIn() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
 	if "" == email {
 		return tools.Failed(400, "email 不能为空")
 	}
-	if user, err := repositories.UserRecordRepository.SignIn(email, password); nil != err {
+	if user, err := logic.UserLogic.SignIn(email, password); nil != err {
 		return tools.Failed(400, err.Error())
 	} else {
 		token := repositories.MemoryStorageRepository.Set("user", user)
