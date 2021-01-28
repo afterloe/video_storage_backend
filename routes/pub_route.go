@@ -19,7 +19,7 @@ func (*PubRoute) GetVersion() *model.ResponseBody {
 }
 
 // 注册
-func (that *PubRoute) PutSignUp() *model.ResponseBody {
+func (that *PubRoute) PutSignup() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
 	if "" == email {
@@ -33,7 +33,7 @@ func (that *PubRoute) PutSignUp() *model.ResponseBody {
 }
 
 // 登陆
-func (that *PubRoute) PostSignIn() *model.ResponseBody {
+func (that *PubRoute) PostSignin() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
 	if "" == email {

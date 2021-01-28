@@ -5,7 +5,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"video_storage/model"
 	"video_storage/repositories"
-	"video_storage/tools"
 )
 
 // 权限拦截 中间件
@@ -14,16 +13,17 @@ func AuthLogic(ctx iris.Context) {
 	if 0 == len(token) {
 		token = ctx.GetHeader("token")
 	}
-	if uid, err := repositories.MemoryStorageRepository.Get("user", token); nil != err {
+	if pointer, err := repositories.MemoryStorageRepository.Get("user", token); nil != err {
 		pleaseSignIn(ctx)
 		ctx.StopExecution()
 	} else {
+		user := pointer.(*model.User)
 		// 打印访问日志
-		logrus.Infof("uid: %s use %s accept %s", uid, ctx.Method(), ctx.RequestPath(true))
+		logrus.Infof("uid: %d use %s accept %s", user.ID, ctx.Method(), ctx.RequestPath(true))
 
 		// TODO 权限拦截
 		ctx.Values().Set("token", token)
-		ctx.Values().Set("uid", uid)
+		ctx.Values().Set("uid", user.ID)
 	}
 	ctx.Next()
 }
@@ -40,10 +40,12 @@ func pleaseSignIn(ctx iris.Context) {
 
 // 获取登录用户信息
 func WhoYouAre(ctx iris.Context) *model.User {
-	uid := ctx.Values().Get("uid").(string)
-	if err := tools.CheckStr(uid); nil != err {
+	uid := ctx.Values().Get("uid")
+	if 0 == uid {
 		pleaseSignIn(ctx)
 		return nil
 	}
-	return repositories.UserRecordRepository.FindByID(uid)
+	user := repositories.UserRecordRepository.FindByID(uid)
+	user.Passwd = ""
+	return user
 }
