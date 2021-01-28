@@ -53,7 +53,7 @@ func configCoreServer() {
 	instance.Any("/", func(context iris.Context) {
 		_, _ = context.JSON(&model.ResponseBody{
 			Code:    200,
-			Message: "Powered by afterloe <liumin@ascs.tech>",
+			Message: "powered by afterloe <605728727@qq.com>",
 		})
 	})
 
