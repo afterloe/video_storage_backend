@@ -1,8 +1,11 @@
 package repositories
 
 import (
+	"database/sql"
+	"errors"
 	"video_storage/model"
 	"video_storage/repositories/constants"
+	"video_storage/sdk"
 )
 
 var DictionaryRepository *dictionaryRepository
@@ -21,6 +24,27 @@ func (*dictionaryRepository) FindDictionaryGroupByName(name string) (*model.Dict
 		instance model.DictionaryGroup
 		err error
 	)
-	// TODO
+	args := []interface{}{name}
+	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
+		_ = row.Scan(&instance.ID, &instance.Name, &instance.GroupType)
+		if 0 != instance.ID {
+			err = errors.New("标签组已经被创建了")
+		}
+	}, constants.FindDictionaryGroupByName, args...)
+
 	return &instance, err
+}
+
+func (*dictionaryRepository) CreateDictionaryGroup(instance *model.DictionaryGroup) error {
+	var err error
+	args := []interface{}{instance.Name, instance.GroupType, instance.CreateTime, instance.ModifyTime, instance.IsDel}
+	sdk.SQLiteSDK.Execute(func(result sql.Result) {
+		id, _ := result.LastInsertId()
+		instance.ID = id
+		if 0 == instance.ID {
+			err = errors.New("插入失败")
+		}
+	}, constants.CreateDictionaryGroup, args...)
+
+	return err
 }
