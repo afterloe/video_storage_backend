@@ -70,6 +70,7 @@ func configCoreServer() {
 	mvc.Configure(instance.Party("/aip"), func(aip *mvc.Application) {
 		aip.Router.Use(logic.AuthLogic)
 		aip.Party("/user").Handle(new(routes.UserRoute))
+		aip.Party("/dictionary").Handle(new(routes.DictionaryManagerRoute))
 		aip.Party("/video").Handle(new(routes.VideoRoute))
 	})
 }
