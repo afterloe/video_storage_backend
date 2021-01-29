@@ -24,7 +24,8 @@ type Dictionary struct {
 
 type DictionaryGroup struct {
 	Model
-	ID     int64        `column:"id" json:"id"`     // 唯一标识
-	Name   string       `column:"name" json:"name"` // 标签组显示名称
-	Values []Dictionary `json:"values"`             // 标签组下所有的标签
+	ID        int64        `column:"id" json:"id"`                // 唯一标识
+	Name      string       `column:"name" json:"name"`            // 标签组显示名称
+	GroupType string       `column:"group_type" json:"groupType"` // 标签组类型
+	Values    []Dictionary `json:"values"`                        // 标签组下所有的标签
 }

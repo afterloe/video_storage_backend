@@ -12,6 +12,8 @@ import (
 func Init() {
 	UserRecordRepository = &userRecordRepository{}
 	_ = UserRecordRepository.repositoryTable(true)
+	DictionaryRepository = &dictionaryRepository{}
+	_ = DictionaryRepository.repositoryTable(true)
 }
 
 // 表检测

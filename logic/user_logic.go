@@ -8,8 +8,6 @@ import (
 	"video_storage/tools"
 )
 
-
-
 type userLogic struct {
 }
 
