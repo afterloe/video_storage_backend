@@ -40,3 +40,12 @@ func (*dictionaryLogic) GetDictionaryGroupList() []*model.DictionaryGroup {
 	repositories.DictionaryRepository.FindAllDictionary(list)
 	return list
 }
+
+func (*dictionaryLogic) GetDictionaryGroup(dictionaryType string) []*model.Dictionary {
+	group := repositories.DictionaryRepository.FindDictionaryGroupByGroupType(dictionaryType)
+	if 0 == group.ID {
+		return nil
+	}
+	repositories.DictionaryRepository.FindAllDictionary([]*model.DictionaryGroup{group})
+	return group.Values
+}

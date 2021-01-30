@@ -104,3 +104,15 @@ func (*dictionaryRepository) FindAllDictionary(list []*model.DictionaryGroup) {
 		g.Values = list
 	}
 }
+
+func (*dictionaryRepository) FindDictionaryGroupByGroupType(dictionaryType string) *model.DictionaryGroup {
+	var instance = new(model.DictionaryGroup)
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		defer rows.Close()
+		columns, _ := rows.Columns()
+		if rows.Next() {
+			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
+		}
+	}, constants.FindDictionaryGroupByGroupType, dictionaryType)
+	return instance
+}
