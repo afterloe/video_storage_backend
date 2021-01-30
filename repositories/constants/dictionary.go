@@ -14,10 +14,10 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionaryGroup + `" (
 	FindDictionaryGroupByName = "SELECT id, name, group_type FROM " + TableDictionaryGroup + " WHERE name = ?"
 	CreateDictionaryGroup     = "INSERT INTO " + TableDictionaryGroup + " (name, group_type, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?)"
 	FindDictionaryGroupByID = "SELECT id, name, group_type, create_time, modify_time, is_del FROM " + TableDictionaryGroup + " WHERE id = ?"
-
+	FindAllDictionaryGroup = "SELECT id, name, group_type, create_time, modify_time FROM " + TableDictionaryGroup + " WHERE is_del = ?"
 	TableDictionary = "dictionary"
 	CreateDictionaryTable = `
-CREATE TABLE IF NOT EXISTS "` + TableDictionaryGroup + `" (
+CREATE TABLE IF NOT EXISTS "` + TableDictionary + `" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"name"	TEXT,
 	"data"	TEXT,
@@ -27,4 +27,5 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionaryGroup + `" (
 	"is_del"	BLOB
 )`
 	CreateDictionary = "INSERT INTO " + TableDictionary + " (name, data, group_id, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?)"
+	FindAllDictionary = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary + " WHERE group_id = ?"
 )

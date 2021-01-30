@@ -14,7 +14,8 @@ type dictionaryRepository struct {
 }
 
 func (*dictionaryRepository) repositoryTable(needCreate bool) error {
-	tableRepository(constants.TableDictionary, constants.CreateDictionaryGroupTable, needCreate)
+	tableRepository(constants.TableDictionaryGroup, constants.CreateDictionaryGroupTable, needCreate)
+	tableRepository(constants.TableDictionary, constants.CreateDictionaryTable, needCreate)
 	return nil
 }
 
@@ -72,4 +73,34 @@ func (*dictionaryRepository) CreateDictionary(instance *model.Dictionary) error 
 		}
 	}, constants.CreateDictionary, args...)
 	return err
+}
+
+func (*dictionaryRepository) FindAllDictionaryGroup() []*model.DictionaryGroup {
+	var list []*model.DictionaryGroup
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		defer rows.Close()
+		columns, _ := rows.Columns()
+		for rows.Next() {
+			instance := &model.DictionaryGroup{}
+			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
+			list = append(list, instance)
+		}
+	}, constants.FindAllDictionaryGroup, true)
+	return list
+}
+
+func (*dictionaryRepository) FindAllDictionary(list []*model.DictionaryGroup) {
+	for _, g := range list {
+		var list []model.Dictionary
+		sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+			defer rows.Close()
+			columns, _ := rows.Columns()
+			for rows.Next() {
+				instance := model.Dictionary{}
+				_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, &instance))
+				list = append(list, instance)
+			}
+		}, constants.FindAllDictionary, g.ID)
+		g.Values = list
+	}
 }

@@ -42,3 +42,8 @@ func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 		return tools.Success(nil)
 	}
 }
+
+// 获取标签组集合
+func (that *DictionaryManagerRoute) GetGroup() *model.ResponseBody {
+	return tools.Success(logic.DictionaryLogic.GetDictionaryGroupList())
+}

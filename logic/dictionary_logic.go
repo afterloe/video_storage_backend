@@ -34,3 +34,9 @@ func (*dictionaryLogic) CreateGroup(name, groupType string) error {
 	instance.ModifyTime = instance.CreateTime
 	return repositories.DictionaryRepository.CreateDictionaryGroup(instance)
 }
+
+func (*dictionaryLogic) GetDictionaryGroupList() []*model.DictionaryGroup {
+	list := repositories.DictionaryRepository.FindAllDictionaryGroup()
+	repositories.DictionaryRepository.FindAllDictionary(list)
+	return list
+}
