@@ -3,7 +3,6 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
@@ -99,7 +98,6 @@ func (*dictionaryRepository) FindAllDictionary(list []*model.DictionaryGroup) {
 			for rows.Next() {
 				instance := new(model.Dictionary)
 				_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
-				fmt.Println(instance)
 				list = append(list, instance)
 			}
 		}, constants.FindAllDictionary, g.ID)
