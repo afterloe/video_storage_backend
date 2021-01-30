@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
@@ -81,23 +82,24 @@ func (*dictionaryRepository) FindAllDictionaryGroup() []*model.DictionaryGroup {
 		defer rows.Close()
 		columns, _ := rows.Columns()
 		for rows.Next() {
-			instance := &model.DictionaryGroup{}
+			instance := new(model.DictionaryGroup)
 			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
 			list = append(list, instance)
 		}
-	}, constants.FindAllDictionaryGroup, true)
+	}, constants.FindAllDictionaryGroup, false)
 	return list
 }
 
 func (*dictionaryRepository) FindAllDictionary(list []*model.DictionaryGroup) {
 	for _, g := range list {
-		var list []model.Dictionary
+		var list []*model.Dictionary
 		sdk.SQLiteSDK.Query(func(rows sql.Rows) {
 			defer rows.Close()
 			columns, _ := rows.Columns()
 			for rows.Next() {
-				instance := model.Dictionary{}
-				_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, &instance))
+				instance := new(model.Dictionary)
+				_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
+				fmt.Println(instance)
 				list = append(list, instance)
 			}
 		}, constants.FindAllDictionary, g.ID)
