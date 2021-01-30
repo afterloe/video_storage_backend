@@ -11,5 +11,10 @@ type DictionaryRoute struct {
 }
 
 func (*DictionaryRoute) GetVideoType() *model.ResponseBody {
+	//logic.DictionaryLogic.GetDictionaryGroup
 	return tools.Success([]string{"热度推荐", "电影", "电视剧", "动漫"})
+}
+
+func (*DictionaryRoute) GetAllDictionary() *model.ResponseBody {
+	return tools.Success(nil)
 }

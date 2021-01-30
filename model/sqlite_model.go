@@ -17,9 +17,10 @@ type User struct {
 
 type Dictionary struct {
 	Model
-	ID   int64  `column:"id" json:"id"`     // 唯一标识
-	Name string `column:"name" json:"name"` // 标签显示名称
-	Data string `column:"data" json:"data"` // 标签值
+	ID      int64  `column:"id" json:"id"`           // 唯一标识
+	Name    string `column:"name" json:"name"`       // 标签显示名称
+	Data    string `column:"data" json:"data"`       // 标签值
+	GroupID int64  `colmn:"group_id" json:"groupID"` // 所属标签组
 }
 
 type DictionaryGroup struct {
