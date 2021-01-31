@@ -75,7 +75,7 @@ func configCoreServer() {
 	})
 }
 
-func signalListener(server *http.Server) {
+func signalListener() {
 	pkg := make(chan os.Signal)
 	signal.Notify(pkg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 	go func() {
@@ -93,7 +93,7 @@ func StartUpHttpServer() {
 	instanceService := &http.Server{
 		Addr: fmt.Sprintf("%s:%s", config.Instance.Backend.ServiceHost, config.Instance.Backend.Port),
 	}
-	signalListener(instanceService)
+	signalListener()
 	if err := instance.Run(iris.Server(instanceService), iris.WithConfiguration(iris.Configuration{
 		DisableStartupLog:                 false,
 		DisableInterruptHandler:           false,

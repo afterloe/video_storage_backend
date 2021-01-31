@@ -43,13 +43,12 @@ func (*userRecordRepository) FindUserByPwd(email, passwd string) *model.User {
 	args := []interface{}{email, passwd}
 	user := model.User{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
-		row.Scan(&user.ID, &user.Mail, &user.Nickname, &user.Avatar, &user.IsDel)
+		_ = row.Scan(&user.ID, &user.Mail, &user.Nickname, &user.Avatar, &user.IsDel)
 	}, constants.SignIn, args...)
 	return &user
 }
 
 func (*userRecordRepository) InsertOne(user *model.User) error {
-	//mail, pwd, nickname, avatar, create_time, modify_time, is_del
 	createTime := tools.GetTime()
 	args := []interface{}{user.Mail, user.Passwd, user.Nickname, user.Avatar, createTime, createTime, false}
 	var err error
