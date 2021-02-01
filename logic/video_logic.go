@@ -2,13 +2,26 @@ package logic
 
 import (
 	"errors"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
+	"strings"
 	"video_storage/model"
 	"video_storage/tools"
 )
 
 type videoLogic struct {
+}
+
+func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
+	var err error
+	videoInfo, err := os.Stat(videoPath)
+	if nil != err {
+		logrus.Error(err)
+		return nil, err
+	}
+
+	return nil, err
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
@@ -41,6 +54,9 @@ func scanFile(path string, info os.FileInfo, list *[]*model.ScanFile) {
 			Mode:       info.Mode(),
 			Size:       info.Size(),
 			ModifyTime: tools.FormatTime(info.ModTime()),
+		}
+		if 0 == strings.Index(f.Name, ".") {
+			return
 		}
 		*list = append(*list, f)
 	}

@@ -11,6 +11,16 @@ type VideoRoute struct {
 	Ctx iris.Context
 }
 
+func (that *VideoRoute) PostFfmpeg() *model.ResponseBody {
+	videoPath := tools.FormValue(that.Ctx, "path")
+	video, err := logic.VideoLogic.FFmpeg(videoPath)
+	if nil != err {
+		return tools.Failed(400, err.Error())
+	} else {
+		return tools.Success(video)
+	}
+}
+
 // 指定扫描
 func (that *VideoRoute) PostScan() *model.ResponseBody {
 	inputPath := tools.FormValue(that.Ctx, "path")
