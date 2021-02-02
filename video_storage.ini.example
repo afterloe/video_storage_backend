@@ -12,5 +12,6 @@ port = 10800
 [logic]
 software_warehouse = /usr/local/apps/leechbox
 sqlite_file = /tmp/video_storage.db
+video_storage = /Users/afterloe/Project/static_view
 
 [db]
