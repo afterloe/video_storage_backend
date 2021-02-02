@@ -17,6 +17,21 @@ func (*videoRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (*videoRepository) IsIncluded(videoPath string) (*model.DemandVideo, error) {
+	var err error
+	demandVideo := &model.DemandVideo{}
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		defer rows.Close()
+		columns, _ := rows.Columns()
+		if rows.Next() {
+			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, demandVideo)...)
+		} else {
+			err = errors.New("视频未收录")
+		}
+	}, constants.VideoIsIncluded, videoPath)
+	return demandVideo, err
+}
+
 func (*videoRepository) Save(demandVideo *model.DemandVideo) error {
 	var err error
 	var executeSQL string
