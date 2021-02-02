@@ -11,6 +11,7 @@ type VideoRoute struct {
 	Ctx iris.Context
 }
 
+// 上新
 func (that *VideoRoute) PostFfmpeg() *model.ResponseBody {
 	videoPath := tools.FormValue(that.Ctx, "path")
 	video, err := logic.VideoLogic.FFmpeg(videoPath)
