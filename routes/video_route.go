@@ -11,6 +11,28 @@ type VideoRoute struct {
 	Ctx iris.Context
 }
 
+// 上新
+func (that *VideoRoute) PostFfmpeg() *model.ResponseBody {
+	videoPath := tools.FormValue(that.Ctx, "path")
+	video, err := logic.VideoLogic.FFmpeg(videoPath)
+	if nil != err {
+		return tools.Failed(400, err.Error())
+	} else {
+		return tools.Success(video)
+	}
+}
+
+// 指定扫描
+func (that *VideoRoute) PostScan() *model.ResponseBody {
+	inputPath := tools.FormValue(that.Ctx, "path")
+	if videoList, err := logic.VideoLogic.ScanVideo(inputPath); nil != err {
+		return tools.Failed(400, err.Error())
+	} else {
+		return tools.Success(videoList)
+	}
+}
+
+// 视频目录
 func (that *VideoRoute) GetList() *model.ResponseBody {
 	videoType := tools.FormValueDefault(that.Ctx, "type", "hot")
 	page := tools.FormValueIntDefault(that.Ctx, "page", 0)

@@ -9,7 +9,7 @@ import (
 	"video_storage/tools"
 )
 
-var MemoryStorageRepository *memoryStorageRepository
+
 
 var storage = make(map[string]map[string]interface{})
 
