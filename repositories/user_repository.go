@@ -10,7 +10,7 @@ import (
 	"video_storage/tools"
 )
 
-var UserRecordRepository *userRecordRepository
+
 
 type userRecordRepository struct {
 }

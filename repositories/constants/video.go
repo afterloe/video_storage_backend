@@ -18,4 +18,6 @@ CREATE TABLE IF NOT EXISTS "` + TableVideo + `" (
 	"modify_time"	TEXT,
 	"is_del"	BLOB
 )`
+	InsertDemandVideo = "INSERT INTO " + TableVideo + " (name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	UpdateDemandVideo = "UPDATE " + TableVideo + " SET name = ? AND size = ? AND width = ? AND height = ? AND duration = ? AND path = ? AND describe = ? AND title = ? AND ffmpeg_json = ? AND modify_time = ? AND is_del = ? WHERE id = ?"
 ) 

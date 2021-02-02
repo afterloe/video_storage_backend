@@ -8,12 +8,21 @@ import (
 	"video_storage/sdk"
 )
 
+var (
+	VideoRepository         *videoRepository
+	UserRecordRepository    *userRecordRepository
+	MemoryStorageRepository *memoryStorageRepository
+	DictionaryRepository    *dictionaryRepository
+)
+
 // 初始化
 func Init() {
 	UserRecordRepository = &userRecordRepository{}
 	_ = UserRecordRepository.repositoryTable(true)
 	DictionaryRepository = &dictionaryRepository{}
 	_ = DictionaryRepository.repositoryTable(true)
+	VideoRepository = &videoRepository{}
+	_ = VideoRepository.repositoryTable(true)
 }
 
 // 表检测

@@ -8,7 +8,7 @@ import (
 	"video_storage/sdk"
 )
 
-var DictionaryRepository *dictionaryRepository
+
 
 type dictionaryRepository struct {
 }

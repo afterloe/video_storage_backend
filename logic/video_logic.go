@@ -2,11 +2,13 @@ package logic
 
 import (
 	"errors"
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"strings"
 	"video_storage/model"
+	"video_storage/repositories"
 	"video_storage/tools"
 )
 
@@ -15,13 +17,22 @@ type videoLogic struct {
 
 func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 	var err error
-	videoInfo, err := os.Stat(videoPath)
+	_, err = os.Stat(videoPath)
 	if nil != err {
 		logrus.Error(err)
 		return nil, err
 	}
-
-	return nil, err
+	ffmpegJSON, err := tools.Execute(fmt.Sprintf("ffprobe -select_streams v \\\n-show_entries format=duration,size,bit_rate,filename \\\n-show_streams \\\n-v quiet \\\n-of csv=\"p=0\" \\\n-of json \\\n-i %s", videoPath))
+	if nil != err {
+		err = errors.New("获取ffmpeg信息失败")
+		return nil, err
+	}
+	demandVideo := &model.DemandVideo{}
+	demandVideo.FFmpegJSON = ffmpegJSON
+	demandVideo.Path = videoPath
+	demandVideo.Name = tools.GeneratorUUID()
+	err = repositories.VideoRepository.Save(demandVideo)
+	return demandVideo, err
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
