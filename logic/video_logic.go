@@ -15,6 +15,23 @@ import (
 type videoLogic struct {
 }
 
+func (*videoLogic) NewVideo(instance *model.DemandVideo) error {
+	var err error
+	demandVideo, err := repositories.VideoRepository.FindByID(instance.ID)
+	if nil != err {
+		return err
+	}
+	demandVideo.ModifyTime = tools.GetTime()
+	demandVideo.Describe = instance.Describe
+	demandVideo.Duration = instance.Duration
+	demandVideo.Height = instance.Height
+	demandVideo.Width = instance.Width
+	demandVideo.Size = instance.Size
+	demandVideo.Title = instance.Title
+	err = repositories.VideoRepository.Save(demandVideo)
+	return err
+}
+
 func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 	var err error
 	_, err = os.Stat(videoPath)

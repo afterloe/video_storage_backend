@@ -17,6 +17,21 @@ func (*videoRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (*videoRepository) FindByID(id int64) (*model.DemandVideo, error) {
+	var err error
+	demandVideo := &model.DemandVideo{}
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		defer rows.Close()
+		columns, _ := rows.Columns()
+		if rows.Next() {
+			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, demandVideo)...)
+		} else {
+			err = errors.New("没有找到该视频")
+		}
+	}, constants.VideoFindByID, id)
+	return demandVideo, err
+}
+
 func (*videoRepository) IsIncluded(videoPath string) (*model.DemandVideo, error) {
 	var err error
 	demandVideo := &model.DemandVideo{}
