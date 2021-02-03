@@ -17,6 +17,29 @@ func (*videoRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (*videoRepository) TotalCount() int {
+	count := new(int)
+	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
+		_ = row.Scan(count)
+	}, constants.VideoTotalCount, false)
+	return *count
+}
+
+func (*videoRepository) GetList(begin, count int) []*model.DemandVideo {
+	var videoList []*model.DemandVideo
+	args := []interface{}{false, count, begin}
+	sdk.SQLiteSDK.Query(func(rows sql.Rows) {
+		defer rows.Close()
+		columns, _ := rows.Columns()
+		for rows.Next() {
+			instance := new(model.DemandVideo)
+			_ = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, instance)...)
+			videoList = append(videoList, instance)
+		}
+	}, constants.VideoGetList, args...)
+	return videoList
+}
+
 func (*videoRepository) FindByID(id int64) (*model.DemandVideo, error) {
 	var err error
 	demandVideo := &model.DemandVideo{}
@@ -55,7 +78,7 @@ func (*videoRepository) Save(demandVideo *model.DemandVideo) error {
 		executeSQL = constants.InsertDemandVideo
 		demandVideo.CreateTime = tools.GetTime()
 		demandVideo.ModifyTime = demandVideo.CreateTime
-		args = []interface{}{demandVideo.Name, demandVideo.Size, demandVideo.Width, demandVideo.Height, demandVideo.Duration, demandVideo.Path, demandVideo.Describe, demandVideo.Title, demandVideo.FFmpegJSON, demandVideo.CreateTime, demandVideo.ModifyTime, true}
+		args = []interface{}{demandVideo.Name, demandVideo.Size, demandVideo.Width, demandVideo.Height, demandVideo.Duration, demandVideo.Path, demandVideo.Describe, demandVideo.Title, demandVideo.FFmpegJSON, demandVideo.CreateTime, demandVideo.ModifyTime, false}
 	} else {
 		executeSQL = constants.UpdateDemandVideo
 		demandVideo.ModifyTime = tools.GetTime()

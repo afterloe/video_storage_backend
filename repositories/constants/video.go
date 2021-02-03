@@ -22,4 +22,6 @@ CREATE TABLE IF NOT EXISTS "` + TableVideo + `" (
 	UpdateDemandVideo = "UPDATE " + TableVideo + " SET name = ? , size = ? , width = ? , height = ? , duration = ? , path = ? , describe = ? , title = ? , ffmpeg_json = ? , modify_time = ? , is_del = ? WHERE id = ?"
 	VideoIsIncluded   = "SELECT id, name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del FROM " + TableVideo + " WHERE path = ?"
 	VideoFindByID     = "SELECT id, name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del FROM " + TableVideo + " WHERE id = ?"
+	VideoGetList      = "SELECT id, name, size, width, height, duration, path, describe, title, create_time, modify_time FROM " + TableVideo + " WHERE is_del = ? ORDER BY modify_time DESC LIMIT ? OFFSET ?"
+	VideoTotalCount   = "SELECT count(1) FROM " + TableVideo + " WHERE is_del = ?"
 )

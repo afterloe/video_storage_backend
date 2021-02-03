@@ -56,8 +56,12 @@ func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
-	// TODO
-	return map[string]interface{}{}
+	dataList := repositories.VideoRepository.GetList(count * page, count)
+	totalNumber := repositories.VideoRepository.TotalCount()
+	return map[string]interface{}{
+		"Data": dataList,
+		"Total": totalNumber,
+	}
 }
 
 func (*videoLogic) ScanVideo(path string) ([]*model.ScanFile, error) {

@@ -27,7 +27,7 @@ func (*memoryStorageRepository) LoadStatusFile () {
 		return
 	}
 	var a map[string]interface{}
-	json.Unmarshal([]byte(content), &a)
+	_ = json.Unmarshal([]byte(content), &a)
 	for dataType, instance := range a {
 		if UserCacheDataType == dataType {
 			storage[UserCacheDataType] = make(map[string]interface{})
