@@ -59,8 +59,8 @@ func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[stri
 	dataList := repositories.VideoRepository.GetList(count * page, count)
 	totalNumber := repositories.VideoRepository.TotalCount()
 	return map[string]interface{}{
-		"Data": dataList,
-		"Total": totalNumber,
+		"data": dataList,
+		"total": totalNumber,
 	}
 }
 

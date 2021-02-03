@@ -41,12 +41,11 @@ func (*memoryStorageRepository) LoadStatusFile () {
 }
 
 func (*memoryStorageRepository) SaveStatus() {
-
-	os.Remove(fileName)
+	_ = os.Remove(fileName)
 	file, _ := os.Create(fileName)
 	defer file.Close()
-	json, _ := json.Marshal(storage)
-	ioutil.WriteFile(fileName, json, 0666)
+	JSONByte, _ := json.Marshal(storage)
+	_ = ioutil.WriteFile(fileName, JSONByte, 0666)
 }
 
 func (*memoryStorageRepository) Del(dataType string, key string) {
