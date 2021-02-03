@@ -7,12 +7,23 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"video_storage/config"
 	"video_storage/model"
 	"video_storage/repositories"
 	"video_storage/tools"
 )
 
 type videoLogic struct {
+}
+
+func (*videoLogic) PlayVideo(id int64) (interface{}, error) {
+	demandVideo, err := repositories.VideoRepository.FindByID(id)
+	if nil != err {
+		return nil, err
+	}
+	_, err = tools.Execute(fmt.Sprintf("ln -s %s %s/%s/%s", demandVideo.Path,
+		config.Instance.Logic.VideoStorage, config.Instance.Logic.VideoPrefix, demandVideo.Name))
+	return fmt.Sprintf("/%s/%s", config.Instance.Logic.VideoPrefix, demandVideo.Name), nil
 }
 
 func (*videoLogic) NewVideo(instance *model.DemandVideo) error {
@@ -56,10 +67,10 @@ func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
-	dataList := repositories.VideoRepository.GetList(count * page, count)
+	dataList := repositories.VideoRepository.GetList(count*page, count)
 	totalNumber := repositories.VideoRepository.TotalCount()
 	return map[string]interface{}{
-		"data": dataList,
+		"data":  dataList,
 		"total": totalNumber,
 	}
 }

@@ -13,5 +13,6 @@ port = 10800
 software_warehouse = /usr/local/apps/leechbox
 sqlite_file = /tmp/video_storage.db
 video_storage = /Users/afterloe/Project/static_view
+video_prefix = on-demand
 
 [db]

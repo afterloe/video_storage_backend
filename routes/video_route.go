@@ -11,6 +11,18 @@ type VideoRoute struct {
 	Ctx iris.Context
 }
 
+func (that *VideoRoute) GetPlayer() *model.ResponseBody {
+	id, err := tools.FormValueInt64(that.Ctx, "id")
+	if nil != err {
+		return  tools.Failed(400, err.Error())
+	}
+	if stream, err := logic.VideoLogic.PlayVideo(id); nil != err {
+		return tools.Failed(400, err.Error())
+	} else {
+		return tools.Success(stream)
+	}
+}
+
 // 创建视频
 func (that *VideoRoute) Post() *model.ResponseBody {
 	demandVideo := &model.DemandVideo{
