@@ -7,12 +7,40 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"video_storage/config"
 	"video_storage/model"
 	"video_storage/repositories"
 	"video_storage/tools"
 )
 
 type videoLogic struct {
+}
+
+func (*videoLogic) PlayVideo(id int64) (interface{}, error) {
+	demandVideo, err := repositories.VideoRepository.FindByID(id)
+	if nil != err {
+		return nil, err
+	}
+	_, err = tools.Execute(fmt.Sprintf("ln -s %s %s/%s/%s", demandVideo.Path,
+		config.Instance.Logic.VideoStorage, config.Instance.Logic.VideoPrefix, demandVideo.Name))
+	return fmt.Sprintf("/%s/%s", config.Instance.Logic.VideoPrefix, demandVideo.Name), nil
+}
+
+func (*videoLogic) NewVideo(instance *model.DemandVideo) error {
+	var err error
+	demandVideo, err := repositories.VideoRepository.FindByID(instance.ID)
+	if nil != err {
+		return err
+	}
+	demandVideo.ModifyTime = tools.GetTime()
+	demandVideo.Describe = instance.Describe
+	demandVideo.Duration = instance.Duration
+	demandVideo.Height = instance.Height
+	demandVideo.Width = instance.Width
+	demandVideo.Size = instance.Size
+	demandVideo.Title = instance.Title
+	err = repositories.VideoRepository.Save(demandVideo)
+	return err
 }
 
 func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
@@ -39,8 +67,12 @@ func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
-	// TODO
-	return map[string]interface{}{}
+	dataList := repositories.VideoRepository.GetList(count*page, count)
+	totalNumber := repositories.VideoRepository.TotalCount()
+	return map[string]interface{}{
+		"data":  dataList,
+		"total": totalNumber,
+	}
 }
 
 func (*videoLogic) ScanVideo(path string) ([]*model.ScanFile, error) {

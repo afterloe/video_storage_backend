@@ -64,6 +64,21 @@ func FormValueInt64(ctx iris.Context, name string) (int64, error) {
 	return strconv.ParseInt(str, 10, 64)
 }
 
+func FormValueFloat64(ctx iris.Context, name string) (float64, error) {
+	str := ctx.FormValue(name)
+	if str == "" {
+		return 0, paramError(name)
+	}
+	return strconv.ParseFloat(str,64)
+}
+
+func FormValueFloat64Default(ctx iris.Context, name string, def float64) float64 {
+	if v, err := FormValueFloat64(ctx, name); err == nil {
+		return v
+	}
+	return def
+}
+
 func FormValueInt64Default(ctx iris.Context, name string, def int64) int64 {
 	if v, err := FormValueInt64(ctx, name); err == nil {
 		return v
@@ -118,4 +133,3 @@ func FormValueBool(ctx iris.Context, name string) (bool, error) {
 	}
 	return strconv.ParseBool(str)
 }
-
