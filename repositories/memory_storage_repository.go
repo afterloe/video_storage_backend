@@ -9,21 +9,19 @@ import (
 	"video_storage/tools"
 )
 
-
-
 var storage = make(map[string]map[string]interface{})
 
 const (
 	UserCacheDataType = "user"
-	fileName = "./.memoryStorage"
+	fileName          = "./.memoryStorage"
 )
 
 type memoryStorageRepository struct {
 }
 
-func (*memoryStorageRepository) LoadStatusFile () {
+func (*memoryStorageRepository) LoadStatusFile() {
 	content := tools.ReadFileAsString(fileName)
-	if "" == content {
+	if content == "" {
 		return
 	}
 	var a map[string]interface{}

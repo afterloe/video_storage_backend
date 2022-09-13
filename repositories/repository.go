@@ -3,9 +3,10 @@ package repositories
 import (
 	"database/sql"
 	_ "database/sql"
-	"github.com/sirupsen/logrus"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
+
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -32,7 +33,7 @@ func tableRepository(tableName, createTableSQL string, needCreate bool) {
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
 		var rowCount int
 		_ = row.Scan(&rowCount)
-		if 0 == rowCount && needCreate {
+		if rowCount == 0 && needCreate {
 			sdk.SQLiteSDK.Execute(nil, createTableSQL)
 		}
 	}, constants.RepositoryTable, args...)

@@ -74,7 +74,7 @@ func (*videoRepository) Save(demandVideo *model.DemandVideo) error {
 	var err error
 	var executeSQL string
 	var args []interface{}
-	if 0 == demandVideo.ID {
+	if demandVideo.ID == 0 {
 		executeSQL = constants.InsertDemandVideo
 		demandVideo.CreateTime = tools.GetTime()
 		demandVideo.ModifyTime = demandVideo.CreateTime
@@ -87,10 +87,10 @@ func (*videoRepository) Save(demandVideo *model.DemandVideo) error {
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
 		changeNumber, _ := result.RowsAffected()
 		id, _ := result.LastInsertId()
-		if 0 == changeNumber {
+		if changeNumber == 0 {
 			err = errors.New("执行更新失败")
 		}
-		if 0 == demandVideo.ID && 0 == id {
+		if demandVideo.ID == 0 && id == 0 {
 			err = errors.New("插入失败")
 		} else {
 			demandVideo.ID = id

@@ -8,8 +8,6 @@ import (
 	"video_storage/sdk"
 )
 
-
-
 type dictionaryRepository struct {
 }
 
@@ -27,7 +25,7 @@ func (*dictionaryRepository) FindDictionaryGroupByName(name string) (*model.Dict
 	args := []interface{}{name}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
 		_ = row.Scan(&instance.ID, &instance.Name, &instance.GroupType)
-		if 0 != instance.ID {
+		if instance.ID != 0 {
 			err = errors.New("标签组已经被创建了")
 		}
 	}, constants.FindDictionaryGroupByName, args...)
@@ -41,7 +39,7 @@ func (*dictionaryRepository) CreateDictionaryGroup(instance *model.DictionaryGro
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
 		id, _ := result.LastInsertId()
 		instance.ID = id
-		if 0 == instance.ID {
+		if instance.ID == 0 {
 			err = errors.New("插入失败")
 		}
 	}, constants.CreateDictionaryGroup, args...)
@@ -55,7 +53,7 @@ func (*dictionaryRepository) FindDictionaryGroupByID(id int64) (*model.Dictionar
 	instance := &model.DictionaryGroup{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
 		_ = row.Scan(sdk.SQLiteSDK.ResultToModel([]string{"id", "name", "group_type", "create_time", "modify_time", "is_del"}, instance)...)
-		if 0 == instance.ID {
+		if instance.ID == 0 {
 			err = errors.New("group 不存在")
 		}
 	}, constants.FindDictionaryGroupByID, args...)
@@ -68,7 +66,7 @@ func (*dictionaryRepository) CreateDictionary(instance *model.Dictionary) error 
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
 		id, _ := result.LastInsertId()
 		instance.ID = id
-		if 0 == instance.ID {
+		if instance.ID == 0 {
 			err = errors.New("插入失败")
 		}
 	}, constants.CreateDictionary, args...)
