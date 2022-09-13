@@ -1,0 +1,12 @@
+# Binaries for programs and plugins
+*.log
+.idea
+.dist
+
+# Test binary, build with `go test -c`
+*.test
+
+# mac os file
+.DS_Store
+node_modules
+.memoryStorage

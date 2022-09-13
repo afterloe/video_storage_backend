@@ -1,0 +1,18 @@
+[common]
+server_name = video_storage
+version = 0.0.1
+socket_file = /tmp/edge_device_manager.socket
+log_path = G:/
+log_level = debug
+
+[backend]
+server_host = 127.0.0.1
+port = 10800
+
+[logic]
+software_warehouse = /usr/local/apps/leechbox
+sqlite_file = /tmp/video_storage.db
+video_storage = /Users/afterloe/Project/static_view
+video_prefix = on-demand
+
+[db]
