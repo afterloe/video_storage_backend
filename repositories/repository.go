@@ -13,6 +13,7 @@ var (
 	UserRecordRepository    *userRecordRepository
 	MemoryStorageRepository *memoryStorageRepository
 	DictionaryRepository    *dictionaryRepository
+	FileMetadataRepository  *fileMetadataRepository
 )
 
 // 初始化
@@ -23,6 +24,8 @@ func Init() {
 	_ = DictionaryRepository.repositoryTable(true)
 	VideoRepository = &videoRepository{}
 	_ = VideoRepository.repositoryTable(true)
+	FileMetadataRepository = &fileMetadataRepository{}
+	_ = FileMetadataRepository.repositoryTable(true)
 }
 
 // 表检测

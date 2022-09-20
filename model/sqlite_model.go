@@ -33,14 +33,26 @@ type DictionaryGroup struct {
 
 type DemandVideo struct {
 	Model
+	ID         int64   `column:"id" json:"id"`                  // 唯一标识
+	Name       string  `column:"name" json:"name"`              // 视频名称
+	Path       string  `column:"path" json:"path"`              // 文件全路径
+	Size       int64   `column:"size" json:"size"`              // 文件大小
+	Width      int     `column:"width" json:"width"`            // 视频宽度
+	Height     int     `column:"height" json:"height"`          // 视频高度
+	Duration   float64 `column:"duration" json:"duration"`      // 视频时间
+	Describe   string  `column:"describe" json:"describe"`      // 描述
+	Title      string  `column:"title" json:"title"`            // 视频标题
+	FFmpegJSON string  `column:"ffmpeg_json" json:"FFmpegJSON"` // 视频流信息
+}
+
+type FileMetadata struct {
 	ID         int64  `column:"id" json:"id"`                  // 唯一标识
-	Name       string `column:"name" json:"name"`              // 视频名称
-	Path       string `column:"path" json:"path"`              // 文件全路径
-	Size       int64  `column:"size" json:"size"`              // 文件大小
-	Width      int    `column:"width" json:"width"`            // 视频宽度
-	Height     int    `column:"height" json:"height"`          // 视频高度
-	Duration   float64    `column:"duration" json:"duration"`      // 视频时间
-	Describe   string `column:"describe" json:"describe"`      // 描述
-	Title      string `column:"title" json:"title"`            // 视频标题
-	FFmpegJSON string `column:"ffmpeg_json" json:"FFmpegJSON"` // 视频流信息
+	HexCode    string `column:"hex_code" json:"hexCode"`       // 唯一编码
+	FileName   string `column:"filename" json:"fileName"`      // 源文件名称
+	FileSize   int64  `column:"file_size" json:"fileSize"`     // 源文件大小
+	FileType   string `column:"file_type" json:"file_type"`    // 源文件类型
+	FullPath   string `column:"fullpath" json:"fullpath"`      // 源文件路径
+	CreateTime string `column:"create_time" json:"createTime"` // 创建时间
+	IsDel      bool   `column:"is_del" json:"isDel"`           // 是否删除
+	IsLink     bool   `column:"is_link" json:"isLink"`         // 是否入库关联
 }
