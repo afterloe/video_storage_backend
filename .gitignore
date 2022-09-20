@@ -5,6 +5,7 @@
 
 # Test binary, build with `go test -c`
 *.test
+*.db
 
 # mac os file
 .DS_Store

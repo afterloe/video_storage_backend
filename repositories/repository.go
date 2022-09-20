@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	_ "database/sql"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
 

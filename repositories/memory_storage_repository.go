@@ -3,6 +3,7 @@ package repositories
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"video_storage/model"
@@ -13,14 +14,15 @@ var storage = make(map[string]map[string]interface{})
 
 const (
 	UserCacheDataType = "user"
-	fileName          = "./.memoryStorage"
+	fileName          = ".memoryStorage"
 )
 
 type memoryStorageRepository struct {
 }
 
-func (*memoryStorageRepository) LoadStatusFile() {
-	content := tools.ReadFileAsString(fileName)
+func (*memoryStorageRepository) LoadStatusFile(cacheFilePath string) {
+	cacheFileFullPath := fmt.Sprintf("%s/%s", cacheFilePath, fileName)
+	content := tools.ReadFileAsString(cacheFileFullPath)
 	if content == "" {
 		return
 	}

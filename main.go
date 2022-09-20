@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 	"video_storage/config"
 	"video_storage/core"
 	"video_storage/repositories"
 	"video_storage/sdk"
 	"video_storage/tools"
+
+	"github.com/sirupsen/logrus"
 )
 
 const appVersion = "0.0.1"
@@ -50,6 +51,6 @@ author:\tafterloe(605728727@qq.com)
 
 func main() {
 	// 启动application
-	core.LoadMemoryStatus()
+	core.LoadMemoryStatus(config.Instance.Logic.SQLiteFile)
 	core.StartUpHttpServer()
 }
