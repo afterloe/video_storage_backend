@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"github.com/kataras/iris/v12"
 	"video_storage/logic"
 	"video_storage/model"
 	"video_storage/tools"
+
+	"github.com/kataras/iris/v12"
 )
 
 type DictionaryManagerRoute struct {
@@ -19,7 +20,7 @@ func (that *DictionaryManagerRoute) Put() *model.ResponseBody {
 	if nil != err {
 		return tools.Failed(400, "参数错误")
 	}
-	if "" == name {
+	if name == "" {
 		return tools.Failed(400, "关键参数均不能为空")
 	}
 	if err := logic.DictionaryLogic.CreateDictionary(name, data, groupID); nil != err {
@@ -33,7 +34,7 @@ func (that *DictionaryManagerRoute) Put() *model.ResponseBody {
 func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 	name := tools.FormValue(that.Ctx, "name")
 	groupType := tools.FormValue(that.Ctx, "groupType")
-	if "" == name || "" == groupType {
+	if name == "" || groupType == "" {
 		return tools.Failed(400, "关键参数均不能为空")
 	}
 	if err := logic.DictionaryLogic.CreateGroup(name, groupType); nil != err {

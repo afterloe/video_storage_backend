@@ -1,12 +1,13 @@
 package routes
 
 import (
-	"github.com/kataras/iris/v12"
 	"video_storage/config"
 	"video_storage/logic"
 	"video_storage/model"
 	"video_storage/repositories"
 	"video_storage/tools"
+
+	"github.com/kataras/iris/v12"
 )
 
 type PubRoute struct {
@@ -22,7 +23,7 @@ func (*PubRoute) GetVersion() *model.ResponseBody {
 func (that *PubRoute) PutSignup() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
-	if "" == email {
+	if email == "" {
 		return tools.Failed(400, "email 不能为空")
 	}
 	if user, err := logic.UserLogic.SignUp(email, password); nil != err {
@@ -32,11 +33,20 @@ func (that *PubRoute) PutSignup() *model.ResponseBody {
 	}
 }
 
+func (that *PubRoute) PostSignin1() *model.ResponseBody {
+	email := tools.FormValue(that.Ctx, "email")
+	password := tools.FormValue(that.Ctx, "password")
+	if email == "" {
+		return tools.Failed(400, "email 不能为空")
+	}
+	return tools.Success(map[string]interface{}{"email": email, "password": password})
+}
+
 // 登陆
 func (that *PubRoute) PostSignin() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
 	password := tools.FormValue(that.Ctx, "password")
-	if "" == email {
+	if email == "" {
 		return tools.Failed(400, "email 不能为空")
 	}
 	user, err := logic.UserLogic.SignIn(email, password)

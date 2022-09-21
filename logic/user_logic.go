@@ -14,10 +14,10 @@ type userLogic struct {
 func (*userLogic) SignIn(email, passwd string) (*model.User, error) {
 	user := repositories.UserRecordRepository.FindUserByPwd(email, tools.MD5(email+passwd))
 	var err error
-	if 0 == user.ID {
+	if user.ID == 0 {
 		err = errors.New("账号密码错误")
 	}
-	if true == user.IsDel {
+	if user.IsDel {
 		err = errors.New("该账号已被冻结")
 	}
 	return user, err
@@ -26,7 +26,7 @@ func (*userLogic) SignIn(email, passwd string) (*model.User, error) {
 func (*userLogic) SignUp(email, passwd string) (*model.User, error) {
 	user := repositories.UserRecordRepository.FindUserByEmail(email)
 	var err error
-	if "" != user.Mail {
+	if user.Mail != "" {
 		err = errors.New("该账号已被注册")
 	} else {
 		user.Mail = email
@@ -40,6 +40,9 @@ func (*userLogic) SignUp(email, passwd string) (*model.User, error) {
 
 func (*userLogic) CheckLoginStatus(uid int64) (string, error) {
 	group := repositories.MemoryStorageRepository.GetAllTypeValue("user")
+	if nil == group {
+		return "", nil
+	}
 	for token, v := range group {
 		if v.(*model.User).ID == uid {
 			return token, errors.New("当前账号已登陆")
@@ -48,6 +51,6 @@ func (*userLogic) CheckLoginStatus(uid int64) (string, error) {
 	return "", nil
 }
 
-func (*userLogic) Cancellation(token string)  {
+func (*userLogic) Cancellation(token string) {
 	repositories.MemoryStorageRepository.Del("user", token)
 }

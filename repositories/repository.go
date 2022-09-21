@@ -18,6 +18,7 @@ var (
 
 // 初始化
 func Init() {
+	MemoryStorageRepository = &memoryStorageRepository{}
 	UserRecordRepository = &userRecordRepository{}
 	_ = UserRecordRepository.repositoryTable(true)
 	DictionaryRepository = &dictionaryRepository{}
