@@ -7,15 +7,15 @@ import (
 	"video_storage/sdk"
 )
 
-type fileMetadataRepository struct {
+type fileMeatdataRepository struct {
 }
 
-func (*fileMetadataRepository) repositoryTable(needCreate bool) error {
+func (*fileMeatdataRepository) repositoryTable(needCreate bool) error {
 	tableRepository(constants.TableFileMetadata, constants.CreateFileMetaDataTable, needCreate)
 	return nil
 }
 
-func (*fileMetadataRepository) FindAll(begin, count int) []*model.FileMetadata {
+func (*fileMeatdataRepository) FindAll(begin, count int) []*model.FileMetadata {
 	var metadataList []*model.FileMetadata
 	args := []interface{}{count, begin}
 	sdk.SQLiteSDK.Query(func(r sql.Rows) {

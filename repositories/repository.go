@@ -13,7 +13,7 @@ var (
 	UserRecordRepository    *userRecordRepository
 	MemoryStorageRepository *memoryStorageRepository
 	DictionaryRepository    *dictionaryRepository
-	FileMetadataRepository  *fileMetadataRepository
+	FileMeatdataRepository  *fileMeatdataRepository
 )
 
 // 初始化
@@ -25,8 +25,8 @@ func Init() {
 	_ = DictionaryRepository.repositoryTable(true)
 	VideoRepository = &videoRepository{}
 	_ = VideoRepository.repositoryTable(true)
-	FileMetadataRepository = &fileMetadataRepository{}
-	_ = FileMetadataRepository.repositoryTable(true)
+	FileMeatdataRepository = &fileMeatdataRepository{}
+	_ = FileMeatdataRepository.repositoryTable(true)
 }
 
 // 表检测

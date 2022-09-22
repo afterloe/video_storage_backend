@@ -33,15 +33,6 @@ func (that *PubRoute) PutSignup() *model.ResponseBody {
 	}
 }
 
-func (that *PubRoute) PostSignin1() *model.ResponseBody {
-	email := tools.FormValue(that.Ctx, "email")
-	password := tools.FormValue(that.Ctx, "password")
-	if email == "" {
-		return tools.Failed(400, "email 不能为空")
-	}
-	return tools.Success(map[string]interface{}{"email": email, "password": password})
-}
-
 // 登陆
 func (that *PubRoute) PostSignin() *model.ResponseBody {
 	email := tools.FormValue(that.Ctx, "email")
@@ -58,5 +49,9 @@ func (that *PubRoute) PostSignin() *model.ResponseBody {
 		repositories.MemoryStorageRepository.Del("user", token)
 	}
 	token = repositories.MemoryStorageRepository.Set("user", user)
-	return tools.Success(map[string]interface{}{"token": token, "user": user})
+	info := &model.LoginBody{
+		Token: token,
+		User:  user,
+	}
+	return tools.Success(info)
 }

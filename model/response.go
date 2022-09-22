@@ -21,3 +21,8 @@ type ScanFile struct {
 	Mode       os.FileMode `json:"mode"`       // 文件类型
 	ModifyTime string      `json:"modifyTime"` // 文件创建时间
 }
+
+type LoginBody struct {
+	Token string      `json:"token"`
+	User  interface{} `json:"user"`
+}
