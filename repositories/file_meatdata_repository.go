@@ -15,6 +15,14 @@ func (*fileMeatdataRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (*fileMeatdataRepository) TotalCount() int {
+	count := new(int)
+	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
+		_ = row.Scan(count)
+	}, constants.FileMeatdataCount, false)
+	return *count
+}
+
 func (*fileMeatdataRepository) FindAll(begin, count int) []*model.FileMetadata {
 	var metadataList []*model.FileMetadata
 	args := []interface{}{count, begin}

@@ -14,5 +14,6 @@ const (
 		"is_del"	BLOB,
 		"is_link"	BLOB
 )`
-	FindAllFileMetaData = `SELECT id, filename, file_type, file_size, create_time, fullpath, is_link FROM ` + TableFileMetadata + ` WHERE is_del = true LIMIT ? OFFSET ?`
+	FindAllFileMetaData = `SELECT id, filename, file_type, file_size, create_time, fullpath, is_link FROM ` + TableFileMetadata + ` WHERE is_del = false LIMIT ? OFFSET ?`
+	FileMeatdataCount   = "SELECT count(1) FROM " + TableFileMetadata + " WHERE is_del = ?"
 )

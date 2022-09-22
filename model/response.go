@@ -26,3 +26,8 @@ type LoginBody struct {
 	Token string      `json:"token"`
 	User  interface{} `json:"user"`
 }
+
+type ListBody struct {
+	Data  interface{} `json:"data"`
+	Total int         `json:"total"`
+}
