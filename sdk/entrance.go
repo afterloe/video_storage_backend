@@ -1,19 +1,21 @@
 package sdk
 
 import (
-	"github.com/sirupsen/logrus"
+	"fmt"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 var SQLiteSDK sqliteSDK
 
-func Init(sqliteFile string) {
+func Init(sqliteFilePath string) {
 	var once sync.Once
 	once.Do(func() {
 		logrus.Info("SDK初始化")
 
 		// sqlite sdk
-		sqlSDK, _ := initSQLiteSDK(sqliteFile)
+		sqlSDK, _ := initSQLiteSDK(fmt.Sprintf("%s/videoStorage.db", sqliteFilePath))
 
 		// 赋值并初始化完毕
 		SQLiteSDK = *sqlSDK

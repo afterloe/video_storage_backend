@@ -3,29 +3,30 @@ package repositories
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"video_storage/model"
 	"video_storage/tools"
+
+	"github.com/sirupsen/logrus"
 )
-
-
 
 var storage = make(map[string]map[string]interface{})
 
 const (
 	UserCacheDataType = "user"
-	fileName = "./.memoryStorage"
+	fileName          = ".memoryStorage"
 )
 
 type memoryStorageRepository struct {
+	runTimeFile string
 }
 
-func (*memoryStorageRepository) LoadStatusFile () {
-	content := tools.ReadFileAsString(fileName)
-	if "" == content {
-		return
-	}
+func (that *memoryStorageRepository) LoadStatusFile(cacheFilePath string) {
+	cacheFileFullPath := fmt.Sprintf("%s/%s", cacheFilePath, fileName)
+	that.runTimeFile = cacheFileFullPath
+	content := tools.ReadFileAsString(cacheFileFullPath)
 	var a map[string]interface{}
 	_ = json.Unmarshal([]byte(content), &a)
 	for dataType, instance := range a {
@@ -38,14 +39,16 @@ func (*memoryStorageRepository) LoadStatusFile () {
 			}
 		}
 	}
+	logrus.Info("加载内存存储数据成功")
+	logrus.Debug(storage)
 }
 
-func (*memoryStorageRepository) SaveStatus() {
-	_ = os.Remove(fileName)
-	file, _ := os.Create(fileName)
+func (that *memoryStorageRepository) SaveStatus() {
+	_ = os.Remove(that.runTimeFile)
+	file, _ := os.Create(that.runTimeFile)
 	defer file.Close()
 	JSONByte, _ := json.Marshal(storage)
-	_ = ioutil.WriteFile(fileName, JSONByte, 0666)
+	_ = ioutil.WriteFile(that.runTimeFile, JSONByte, 0666)
 }
 
 func (*memoryStorageRepository) Del(dataType string, key string) {
@@ -81,6 +84,7 @@ func (that *memoryStorageRepository) Set(dataType string, value interface{}) str
 		}
 		storage[UserCacheDataType][key] = value
 	}
+	logrus.Debug("user[:", value, "] login as: ", key)
 	that.SaveStatus()
 	return key
 }

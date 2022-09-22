@@ -3,11 +3,12 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"github.com/sirupsen/logrus"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
 	"video_storage/tools"
+
+	"github.com/sirupsen/logrus"
 )
 
 type userRecordRepository struct {
@@ -28,7 +29,7 @@ func (*userRecordRepository) FindByID(uid interface{}) *model.User {
 			return
 		}
 		columns, _ := rows.Columns()
-		err := rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, &user)...)
+		err = rows.Scan(sdk.SQLiteSDK.ResultToModel(columns, &user)...)
 		if nil != err {
 			logrus.Debug(err)
 			logrus.Debug("解构失败.")
@@ -53,7 +54,7 @@ func (*userRecordRepository) InsertOne(user *model.User) error {
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
 		id, _ := result.LastInsertId()
 		user.ID = id
-		if 0 == user.ID {
+		if user.ID == 0 {
 			err = errors.New("插入失败")
 		}
 	}, constants.InsertOne, args...)

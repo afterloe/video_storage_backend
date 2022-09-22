@@ -2,12 +2,6 @@ package core
 
 import (
 	"fmt"
-	irisCore "github.com/iris-contrib/middleware/cors"
-	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/middleware/logger"
-	"github.com/kataras/iris/v12/middleware/recover"
-	"github.com/kataras/iris/v12/mvc"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/signal"
@@ -20,6 +14,13 @@ import (
 	"video_storage/routes"
 	"video_storage/sdk"
 	"video_storage/tools"
+
+	irisCore "github.com/iris-contrib/middleware/cors"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/middleware/logger"
+	"github.com/kataras/iris/v12/middleware/recover"
+	"github.com/kataras/iris/v12/mvc"
+	"github.com/sirupsen/logrus"
 )
 
 var instance *iris.Application
@@ -56,7 +57,7 @@ func configCoreServer() {
 	instance.Any("/", func(context iris.Context) {
 		_, _ = context.JSON(&model.ResponseBody{
 			Code:    200,
-			Message: "powered by afterloe <605728727@qq.com>",
+			Message: "powered by afterloe(605728727@qq.com)",
 		})
 	})
 
@@ -72,6 +73,7 @@ func configCoreServer() {
 		aip.Party("/user").Handle(new(routes.UserRoute))
 		aip.Party("/dictionary").Handle(new(routes.DictionaryManagerRoute))
 		aip.Party("/video").Handle(new(routes.VideoRoute))
+		aip.Party("/meatdata").Handle(new(routes.FileMeatdataRoute))
 	})
 }
 
@@ -112,6 +114,6 @@ func StartUpHttpServer() {
 	}
 }
 
-func LoadMemoryStatus() {
-	repositories.MemoryStorageRepository.LoadStatusFile()
+func LoadMemoryStatus(cacheFilePath string) {
+	repositories.MemoryStorageRepository.LoadStatusFile(cacheFilePath)
 }
