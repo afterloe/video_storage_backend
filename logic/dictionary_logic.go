@@ -6,7 +6,7 @@ import (
 	"video_storage/tools"
 )
 
-type dictionaryLogic struct {}
+type dictionaryLogic struct{}
 
 func (*dictionaryLogic) CreateDictionary(name, data string, groupID int64) error {
 	if _, err := repositories.DictionaryRepository.FindDictionaryGroupByID(groupID); nil != err {
@@ -20,6 +20,15 @@ func (*dictionaryLogic) CreateDictionary(name, data string, groupID int64) error
 	dictionary.CreateTime = tools.GetTime()
 	dictionary.ModifyTime = dictionary.CreateTime
 	return repositories.DictionaryRepository.CreateDictionary(dictionary)
+}
+
+func (*dictionaryLogic) DeleteDictionary(dictionaryID int) error {
+	_, err := repositories.DictionaryRepository.FindDictionaryByID(dictionaryID)
+	if nil != err {
+		return err
+	}
+	err = repositories.DictionaryRepository.DeleteDictionary(dictionaryID)
+	return err
 }
 
 func (*dictionaryLogic) CreateGroup(name, groupType string) error {

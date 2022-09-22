@@ -30,6 +30,20 @@ func (that *DictionaryManagerRoute) Put() *model.ResponseBody {
 	}
 }
 
+// 删除子标签
+func (that *DictionaryManagerRoute) Delete() *model.ResponseBody {
+	dictionaryID, err := tools.FormValueInt(that.Ctx, "id")
+	if nil != err {
+		return tools.Failed(400, "参数类型错误")
+	}
+	err = logic.DictionaryLogic.DeleteDictionary(dictionaryID)
+	if err != nil {
+		return tools.Failed(500, err.Error())
+	} else {
+		return tools.Success(nil)
+	}
+}
+
 // 创建标签组
 func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 	name := tools.FormValue(that.Ctx, "name")

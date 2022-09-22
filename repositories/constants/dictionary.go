@@ -16,8 +16,9 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionaryGroup + `" (
 	CreateDictionaryGroup          = "INSERT INTO " + TableDictionaryGroup + " (name, group_type, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?)"
 	FindDictionaryGroupByID        = "SELECT id, name, group_type, create_time, modify_time, is_del FROM " + TableDictionaryGroup + " WHERE id = ?"
 	FindAllDictionaryGroup         = "SELECT id, name, group_type, create_time, modify_time FROM " + TableDictionaryGroup + " WHERE is_del = ?"
-	TableDictionary                = "dictionary"
-	CreateDictionaryTable          = `
+
+	TableDictionary       = "dictionary"
+	CreateDictionaryTable = `
 CREATE TABLE IF NOT EXISTS "` + TableDictionary + `" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"name"	TEXT,
@@ -27,6 +28,8 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionary + `" (
 	"modify_time"	TEXT,
 	"is_del"	BLOB
 )`
-	CreateDictionary  = "INSERT INTO " + TableDictionary + " (name, data, group_id, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?)"
-	FindAllDictionary = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary + " WHERE group_id = ?"
+	CreateDictionary   = "INSERT INTO " + TableDictionary + " (name, data, group_id, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?)"
+	FindAllDictionary  = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary + " WHERE is_del = false AND group_id = ?"
+	FindDictionaryByID = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary
+	DeleteDictionary   = "UPDATE " + TableDictionary + " SET is_del = 'false' WHERE id = ?"
 )

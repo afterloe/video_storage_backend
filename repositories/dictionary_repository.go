@@ -17,6 +17,38 @@ func (*dictionaryRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
+func (*dictionaryRepository) FindDictionaryByID(id int) (*model.Dictionary, error) {
+	var (
+		instance model.Dictionary
+		err      error
+	)
+	args := []interface{}{id}
+	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
+		if row.Err() != nil {
+			err = row.Err()
+		} else {
+			_ = row.Scan(&instance.Name, &instance.ModifyTime, &instance.IsDel, &instance.ID, &instance.GroupID, &instance.Data, &instance.CreateTime)
+		}
+	}, constants.FindDictionaryByID, args...)
+	return &instance, err
+}
+
+func (*dictionaryRepository) DeleteDictionary(id int) error {
+	var err error
+	args := []interface{}{id}
+	sdk.SQLiteSDK.Execute(func(result sql.Result) {
+		count, e := result.RowsAffected()
+		if nil != e {
+			err = e
+		}
+		if count == 0 {
+			err = errors.New("删除失败")
+		}
+	}, constants.DeleteDictionary, args...)
+
+	return err
+}
+
 func (*dictionaryRepository) FindDictionaryGroupByName(name string) (*model.DictionaryGroup, error) {
 	var (
 		instance model.DictionaryGroup
