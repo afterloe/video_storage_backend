@@ -52,7 +52,24 @@ func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 		return tools.Failed(400, "关键参数均不能为空")
 	}
 	if err := logic.DictionaryLogic.CreateGroup(name, groupType); nil != err {
-		return tools.Failed(400, err.Error())
+		return tools.Failed(500, err.Error())
+	} else {
+		return tools.Success(nil)
+	}
+}
+
+func (that *DictionaryManagerRoute) PostGroup() *model.ResponseBody {
+	groupID, err := tools.FormValueInt64(that.Ctx, "id")
+	if nil != err {
+		return tools.Failed(400, "对象不存在")
+	}
+	name := tools.FormValue(that.Ctx, "name")
+	groupType := tools.FormValue(that.Ctx, "groupType")
+	if name == "" || groupType == "" {
+		return tools.Failed(400, "关键参数均不能为空")
+	}
+	if err := logic.DictionaryLogic.UpdateGroup(groupID, name, groupType); nil != err {
+		return tools.Failed(500, err.Error())
 	} else {
 		return tools.Success(nil)
 	}
@@ -62,7 +79,7 @@ func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 func (that *DictionaryManagerRoute) DeleteGroup() *model.ResponseBody {
 	groupID, err := tools.FormValueInt64(that.Ctx, "id")
 	if nil != err {
-		return tools.Failed(400, "参数类型错误")
+		return tools.Failed(400, "对象不存在")
 	}
 	err = logic.DictionaryLogic.DeleteGroup(groupID)
 	if err != nil {

@@ -44,6 +44,17 @@ func (*dictionaryLogic) CreateGroup(name, groupType string) error {
 	return repositories.DictionaryRepository.CreateDictionaryGroup(instance)
 }
 
+func (*dictionaryLogic) UpdateGroup(id int64, name, groupType string) error {
+	instance, err := repositories.DictionaryRepository.FindDictionaryGroupByID(id)
+	if nil != err {
+		return err
+	}
+	instance.Name = name
+	instance.GroupType = groupType
+	instance.ModifyTime = tools.GetTime()
+	return repositories.DictionaryRepository.ModifyDictionaryGroup(instance)
+}
+
 func (*dictionaryLogic) DeleteGroup(groupID int64) error {
 	_, err := repositories.DictionaryRepository.FindDictionaryGroupByID(groupID)
 	if nil != err {
