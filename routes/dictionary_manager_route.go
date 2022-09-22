@@ -58,6 +58,20 @@ func (that *DictionaryManagerRoute) PutGroup() *model.ResponseBody {
 	}
 }
 
+// 删除标签组
+func (that *DictionaryManagerRoute) DeleteGroup() *model.ResponseBody {
+	groupID, err := tools.FormValueInt64(that.Ctx, "id")
+	if nil != err {
+		return tools.Failed(400, "参数类型错误")
+	}
+	err = logic.DictionaryLogic.DeleteGroup(groupID)
+	if err != nil {
+		return tools.Failed(500, err.Error())
+	} else {
+		return tools.Success(nil)
+	}
+}
+
 // 获取标签组集合
 func (that *DictionaryManagerRoute) GetGroup() *model.ResponseBody {
 	return tools.Success(logic.DictionaryLogic.GetDictionaryGroupList())

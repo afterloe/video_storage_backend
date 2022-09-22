@@ -44,6 +44,15 @@ func (*dictionaryLogic) CreateGroup(name, groupType string) error {
 	return repositories.DictionaryRepository.CreateDictionaryGroup(instance)
 }
 
+func (*dictionaryLogic) DeleteGroup(groupID int64) error {
+	_, err := repositories.DictionaryRepository.FindDictionaryGroupByID(groupID)
+	if nil != err {
+		return err
+	}
+	err = repositories.DictionaryRepository.DeleteDictionaryGroup(groupID)
+	return err
+}
+
 func (*dictionaryLogic) GetDictionaryGroupList() []*model.DictionaryGroup {
 	list := repositories.DictionaryRepository.FindAllDictionaryGroup()
 	repositories.DictionaryRepository.FindAllDictionary(list)

@@ -11,11 +11,12 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionaryGroup + `" (
 	"modify_time"	TEXT,
 	"is_del"	BLOB
 )`
-	FindDictionaryGroupByName      = "SELECT id, name, group_type FROM " + TableDictionaryGroup + " WHERE name = ?"
-	FindDictionaryGroupByGroupType = "SELECT id, name, group_type FROM " + TableDictionaryGroup + " WHERE group_type = ?"
+	FindDictionaryGroupByName      = "SELECT id, name, group_type FROM " + TableDictionaryGroup + " WHERE is_del = false AND name = ?"
+	FindDictionaryGroupByGroupType = "SELECT id, name, group_type FROM " + TableDictionaryGroup + " WHERE is_del = false AND group_type = ?"
 	CreateDictionaryGroup          = "INSERT INTO " + TableDictionaryGroup + " (name, group_type, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?)"
 	FindDictionaryGroupByID        = "SELECT id, name, group_type, create_time, modify_time, is_del FROM " + TableDictionaryGroup + " WHERE id = ?"
 	FindAllDictionaryGroup         = "SELECT id, name, group_type, create_time, modify_time FROM " + TableDictionaryGroup + " WHERE is_del = ?"
+	DeleteDictionaryGroup          = "UPDATE " + TableDictionaryGroup + " SET is_del = 'false' WHERE id = ?"
 
 	TableDictionary       = "dictionary"
 	CreateDictionaryTable = `

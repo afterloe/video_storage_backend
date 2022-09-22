@@ -79,6 +79,22 @@ func (*dictionaryRepository) CreateDictionaryGroup(instance *model.DictionaryGro
 	return err
 }
 
+func (*dictionaryRepository) DeleteDictionaryGroup(id int64) error {
+	var err error
+	args := []interface{}{id}
+	sdk.SQLiteSDK.Execute(func(result sql.Result) {
+		count, e := result.RowsAffected()
+		if nil != e {
+			err = e
+		}
+		if count == 0 {
+			err = errors.New("删除失败")
+		}
+	}, constants.DeleteDictionaryGroup, args...)
+
+	return err
+}
+
 func (*dictionaryRepository) FindDictionaryGroupByID(id int64) (*model.DictionaryGroup, error) {
 	var err error
 	args := []interface{}{id}
