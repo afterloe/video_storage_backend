@@ -3,7 +3,6 @@ package logic
 import (
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -11,6 +10,8 @@ import (
 	"video_storage/model"
 	"video_storage/repositories"
 	"video_storage/tools"
+
+	"github.com/sirupsen/logrus"
 )
 
 type videoLogic struct {
@@ -23,7 +24,7 @@ func (*videoLogic) PlayVideo(id int64) (interface{}, error) {
 	}
 	_, err = tools.Execute(fmt.Sprintf("ln -s %s %s/%s/%s", demandVideo.Path,
 		config.Instance.Logic.VideoStorage, config.Instance.Logic.VideoPrefix, demandVideo.Name))
-	return fmt.Sprintf("/%s/%s", config.Instance.Logic.VideoPrefix, demandVideo.Name), nil
+	return fmt.Sprintf("/%s/%s", config.Instance.Logic.VideoPrefix, demandVideo.Name), err
 }
 
 func (*videoLogic) NewVideo(instance *model.DemandVideo) error {
@@ -101,7 +102,7 @@ func scanFile(path string, info os.FileInfo, list *[]*model.ScanFile) {
 			Size:       info.Size(),
 			ModifyTime: tools.FormatTime(info.ModTime()),
 		}
-		if 0 == strings.Index(f.Name, ".") {
+		if strings.Index(f.Name, ".") == 0 {
 			return
 		}
 		*list = append(*list, f)

@@ -3,9 +3,11 @@ package sdk
 import (
 	"context"
 	"database/sql"
+	"reflect"
+	"strings"
+
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
-	"reflect"
 )
 
 type sqliteSDK struct {
@@ -71,6 +73,15 @@ func (that *sqliteSDK) Execute(callback func(sql.Result), sqlStr string, args ..
 	}
 }
 
+func (that *sqliteSDK) ResultToModelBySQL(sql string, value interface{}) []interface{} {
+	idx := strings.Index(sql, "FROM")
+	columns := strings.Split(sql[6:idx], ",")
+	for i, column := range columns {
+		columns[i] = strings.Trim(column, " ")
+	}
+	return that.ResultToModel(columns, value)
+}
+
 // 反射 select结果转模型
 func (*sqliteSDK) ResultToModel(columns []string, value interface{}) []interface{} {
 	var desc []interface{}
@@ -85,7 +96,7 @@ func (*sqliteSDK) ResultToModel(columns []string, value interface{}) []interface
 				value := instanceValue.Field(i).Addr().Interface()
 				desc = append(desc, value)
 			}
-			if "Model" == fieldType {
+			if fieldType == "Model" {
 				modelField := instanceValue.Field(i).Type()
 				for j := 0; j < modelField.NumField(); j++ {
 					columnName := modelField.Field(j).Tag.Get("column")

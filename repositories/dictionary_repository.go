@@ -17,23 +17,24 @@ func (*dictionaryRepository) repositoryTable(needCreate bool) error {
 	return nil
 }
 
-func (*dictionaryRepository) FindDictionaryByID(id int) (*model.Dictionary, error) {
-	var (
-		instance model.Dictionary
-		err      error
-	)
+func (*dictionaryRepository) FindDictionaryByID(id int64) (*model.Dictionary, error) {
+	var err error
 	args := []interface{}{id}
+	instance := &model.Dictionary{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
 		if row.Err() != nil {
 			err = row.Err()
 		} else {
-			_ = row.Scan(&instance.Name, &instance.ModifyTime, &instance.IsDel, &instance.ID, &instance.GroupID, &instance.Data, &instance.CreateTime)
+			_ = row.Scan(sdk.SQLiteSDK.ResultToModelBySQL(constants.FindDictionaryByID, instance)...)
+			if instance.ID == 0 {
+				err = errors.New("不存在该对象")
+			}
 		}
 	}, constants.FindDictionaryByID, args...)
-	return &instance, err
+	return instance, err
 }
 
-func (*dictionaryRepository) DeleteDictionary(id int) error {
+func (*dictionaryRepository) DeleteDictionary(id int64) error {
 	var err error
 	args := []interface{}{id}
 	sdk.SQLiteSDK.Execute(func(result sql.Result) {
@@ -115,7 +116,7 @@ func (*dictionaryRepository) FindDictionaryGroupByID(id int64) (*model.Dictionar
 	args := []interface{}{id}
 	instance := &model.DictionaryGroup{}
 	sdk.SQLiteSDK.QueryOne(func(row sql.Row) {
-		_ = row.Scan(sdk.SQLiteSDK.ResultToModel([]string{"id", "name", "group_type", "create_time", "modify_time", "is_del"}, instance)...)
+		_ = row.Scan(sdk.SQLiteSDK.ResultToModelBySQL(constants.FindDictionaryGroupByID, instance)...)
 		if instance.ID == 0 {
 			err = errors.New("group 不存在")
 		}
@@ -133,6 +134,21 @@ func (*dictionaryRepository) CreateDictionary(instance *model.Dictionary) error 
 			err = errors.New("插入失败")
 		}
 	}, constants.CreateDictionary, args...)
+	return err
+}
+
+func (*dictionaryRepository) ModifyDictionary(instance *model.Dictionary) error {
+	var err error
+	args := []interface{}{instance.Name, instance.Data, instance.ModifyTime, instance.ID}
+	sdk.SQLiteSDK.Execute(func(result sql.Result) {
+		count, e := result.RowsAffected()
+		if nil != e {
+			err = e
+		}
+		if count == 0 {
+			err = errors.New("修改失败")
+		}
+	}, constants.ModifyDictionary, args...)
 	return err
 }
 

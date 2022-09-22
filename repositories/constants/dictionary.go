@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS "` + TableDictionary + `" (
 )`
 	CreateDictionary   = "INSERT INTO " + TableDictionary + " (name, data, group_id, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?)"
 	FindAllDictionary  = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary + " WHERE is_del = false AND group_id = ?"
-	FindDictionaryByID = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary
+	FindDictionaryByID = "SELECT id, name, data, group_id, create_time, modify_time, is_del FROM " + TableDictionary + " WHERE id = ?"
 	DeleteDictionary   = "UPDATE " + TableDictionary + " SET is_del = 'false' WHERE id = ?"
+	ModifyDictionary   = "UPDATE " + TableDictionary + " SET name = ?, data = ?, modify_time = ? WHERE id = ?"
 )
