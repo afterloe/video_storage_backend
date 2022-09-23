@@ -67,12 +67,12 @@ func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
 	return demandVideo, err
 }
 
-func (*videoLogic) FindVideoByTarget(videoType string, page, count int) map[string]interface{} {
+func (*videoLogic) FindVideoByTarget(videoType string, page, count int) *model.ListBody {
 	dataList := repositories.VideoRepository.GetList(count*page, count)
 	totalNumber := repositories.VideoRepository.TotalCount()
-	return map[string]interface{}{
-		"data":  dataList,
-		"total": totalNumber,
+	return &model.ListBody{
+		Total: totalNumber,
+		Data:  dataList,
 	}
 }
 
