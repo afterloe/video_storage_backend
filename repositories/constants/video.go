@@ -1,24 +1,23 @@
 package constants
 
 const (
-	TableVideo       = "on_demand_video"
+	TableVideo       = "video_describe"
 	CreateVideoTable = `
 CREATE TABLE IF NOT EXISTS "` + TableVideo + `" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	"name"	TEXT,
-	"size"	INTEGER,
+	"metadata_id" INTEGER
 	"width"	INTEGER,
 	"height"	INTEGER,
-	"duration"	INTEGER,
-    "path" TEXT,
-	"describe"	TEXT,
-	"title"	TEXT,
-	"ffmpeg_json"	TEXT,
+	"duration"	TEXT,
+	"codec_name"	TEXT,
+	"display_aspect_ratio" TEXT,
+	"codec_long_name"	TEXT
 	"create_time"	TEXT,
 	"modify_time"	TEXT,
 	"is_del"	BLOB
 )`
-	InsertDemandVideo = "INSERT INTO " + TableVideo + " (name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	InsertVideoDescribe = "INSERT INTO " + TableVideo + " (metadata_id, width, height, duration, codec_name, display_aspect_ratio, codec_long_name, create_time, modify_time, is_del) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
 	UpdateDemandVideo = "UPDATE " + TableVideo + " SET name = ? , size = ? , width = ? , height = ? , duration = ? , path = ? , describe = ? , title = ? , ffmpeg_json = ? , modify_time = ? , is_del = ? WHERE id = ?"
 	VideoIsIncluded   = "SELECT id, name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del FROM " + TableVideo + " WHERE path = ?"
 	VideoFindByID     = "SELECT id, name, size, width, height, duration, path, describe, title, ffmpeg_json, create_time, modify_time, is_del FROM " + TableVideo + " WHERE id = ?"

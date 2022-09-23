@@ -5,6 +5,7 @@ var (
 	UserLogic         *userLogic
 	DictionaryLogic   *dictionaryLogic
 	FileMetadataLogic *fileMetadataLogic
+	ObjectLogic       *objectLogic
 )
 
 func init() {
@@ -12,4 +13,5 @@ func init() {
 	UserLogic = &userLogic{}
 	DictionaryLogic = &dictionaryLogic{}
 	FileMetadataLogic = &fileMetadataLogic{}
+	ObjectLogic = &objectLogic{}
 }

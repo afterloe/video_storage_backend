@@ -64,6 +64,7 @@ func (that *sqliteSDK) Query(callback func(sql.Rows), sqlStr string, args ...int
 
 // 执行SQL
 func (that *sqliteSDK) Execute(callback func(sql.Result), sqlStr string, args ...interface{}) {
+	logrus.Debugf("执行SQL: %v -> %v", sqlStr, args)
 	if result, err := that.instance.ExecContext(that.GetContext(), sqlStr, args...); nil != err {
 		logrus.Errorf("执行SQL出现异常: %v -> %v", sqlStr, args)
 		logrus.Error(err)

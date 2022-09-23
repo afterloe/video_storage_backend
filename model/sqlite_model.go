@@ -31,18 +31,23 @@ type DictionaryGroup struct {
 	Values    []*Dictionary `json:"values"`                        // 标签组下所有的标签
 }
 
-type DemandVideo struct {
+type Object struct {
 	Model
-	ID         int64   `column:"id" json:"id"`                  // 唯一标识
-	Name       string  `column:"name" json:"name"`              // 视频名称
-	Path       string  `column:"path" json:"path"`              // 文件全路径
-	Size       int64   `column:"size" json:"size"`              // 文件大小
-	Width      int     `column:"width" json:"width"`            // 视频宽度
-	Height     int     `column:"height" json:"height"`          // 视频高度
-	Duration   float64 `column:"duration" json:"duration"`      // 视频时间
-	Describe   string  `column:"describe" json:"describe"`      // 描述
-	Title      string  `column:"title" json:"title"`            // 视频标题
-	FFmpegJSON string  `column:"ffmpeg_json" json:"FFmpegJSON"` // 视频流信息
+	ID          int64  `column:"id" json:"id"`
+	VirtualPath string `column:"virtual_path" json:"virtual_path"`
+	MetadataID  int64  `column:"metadata_id" json:"metadata_id"` // 元数据id
+}
+
+type VideoDescribe struct {
+	Model
+	ID                 int64  `column:"id" json:"id"`                                     // 唯一标识
+	MetadataID         int64  `column:"metadata_id" json:"metadata_id"`                   // 元数据id
+	Width              int64  `column:"width" json:"width"`                               // 视频宽度
+	Height             int64  `column:"height" json:"height"`                             // 视频高度
+	Duration           string `column:"duration" json:"duration"`                         // 视频时间
+	CodecName          string `column:"codec_name" json:"codec_name"`                     // 编码名称
+	DisplayAspectRatio string `column:"display_aspect_ratio" json:"display_aspect_ratio"` // 播放比例
+	CodecLongName      string `column:"codec_long_name" json:"codec_long_name"`           // 编码信息
 }
 
 type FileMetadata struct {
