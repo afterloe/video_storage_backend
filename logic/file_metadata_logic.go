@@ -10,6 +10,15 @@ import (
 
 type fileMetadataLogic struct{}
 
+func (*fileMetadataLogic) FindByID(id int64) (*model.FileMetadata, error) {
+	file := repositories.FileMetadataRepository.FindByID(id)
+	if file == nil {
+		return file, errors.New("未检索到该id对应的对象信息")
+	}
+
+	return file, nil
+}
+
 func (*fileMetadataLogic) FindAll(page, count int) *model.ListBody {
 	dataList := repositories.FileMetadataRepository.FindAll(page*count, count)
 	totalNumber := repositories.FileMetadataRepository.TotalCount()

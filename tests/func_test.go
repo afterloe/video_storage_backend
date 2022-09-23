@@ -3,7 +3,17 @@ package tests
 import (
 	"strings"
 	"testing"
+	"video_storage/tools"
 )
+
+func TestExecuteCMD(t *testing.T) {
+	cmdStr := "ffprobe -v quiet -print_format json -show_format -show_streams %s"
+	receive := tools.Execute(cmdStr, `/mnt/wehouse_3`)
+	// if receive.HasError() != nil {
+	// 	// t.Errorf("%s\n", receive.HasError().Error())
+	// }
+	t.Logf("%s\n", receive.ToString())
+}
 
 func TestSQLToModel(t *testing.T) {
 	TableDictionaryGroup := "User"

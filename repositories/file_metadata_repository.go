@@ -23,6 +23,18 @@ func (*fileMetadataRepository) TotalCount() int {
 	return *count
 }
 
+func (*fileMetadataRepository) FindByID(id int64) *model.FileMetadata {
+	args := []interface{}{id}
+	instance := &model.FileMetadata{}
+	sdk.SQLiteSDK.QueryOne(func(r sql.Row) {
+		_ = r.Scan(sdk.SQLiteSDK.ResultToModelBySQL(constants.FindFileMetadataByID, instance)...)
+		if instance.ID == 0 {
+			instance = nil
+		}
+	}, constants.FindFileMetadataByID, args...)
+	return instance
+}
+
 func (*fileMetadataRepository) FindAll(start, count int) []*model.FileMetadata {
 	var metadataList []*model.FileMetadata
 	args := []interface{}{count, start}

@@ -1,9 +1,10 @@
 package logic
 
 import (
-	"errors"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 	"video_storage/config"
 	"video_storage/model"
 	"video_storage/repositories"
@@ -20,8 +21,8 @@ func (*videoLogic) PlayVideo(id int64) (interface{}, error) {
 	if nil != err {
 		return nil, err
 	}
-	_, err = tools.Execute(fmt.Sprintf("ln -s %s %s/%s/%s", demandVideo.Path,
-		config.Instance.Logic.VideoStorage, config.Instance.Logic.VideoPrefix, demandVideo.Name))
+	// _, err = tools.Execute(fmt.Sprintf("ln -s %s %s/%s/%s", demandVideo.Path,
+	// config.Instance.Logic.VideoStorage, config.Instance.Logic.VideoPrefix, demandVideo.Name))
 	return fmt.Sprintf("/%s/%s", config.Instance.Logic.VideoPrefix, demandVideo.Name), err
 }
 
@@ -42,27 +43,34 @@ func (*videoLogic) NewVideo(instance *model.DemandVideo) error {
 	return err
 }
 
-func (*videoLogic) FFmpeg(videoPath string) (*model.DemandVideo, error) {
+func (*videoLogic) Ffprobe(videoPath string) (string, error) {
 	var err error
 	_, err = os.Stat(videoPath)
 	if nil != err {
 		logrus.Error(err)
-		return nil, err
+		return "", err
 	}
-	demandVideo, err := repositories.VideoRepository.IsIncluded(videoPath)
-	if nil == err {
-		return demandVideo, nil
+	videoPath = regexp.QuoteMeta(videoPath)
+	videoPath = strings.ReplaceAll(videoPath, " ", `\ `)
+	receive := tools.Execute("ffprobe -v quiet -print_format json -show_format -show_streams %s", videoPath)
+	if receive.HasError() {
+		return "", receive.GetError()
 	}
-	ffmpegJSON, err := tools.Execute(fmt.Sprintf("ffprobe -select_streams v \\\n-show_entries format=duration,size,bit_rate,filename \\\n-show_streams \\\n-v quiet \\\n-of csv=\"p=0\" \\\n-of json \\\n-i %s", videoPath))
-	if nil != err {
-		err = errors.New("获取ffmpeg信息失败")
-		return nil, err
-	}
-	demandVideo.FFmpegJSON = ffmpegJSON
-	demandVideo.Path = videoPath
-	demandVideo.Name = tools.GeneratorUUID()
-	err = repositories.VideoRepository.Save(demandVideo)
-	return demandVideo, err
+	// demandVideo, err := repositories.VideoRepository.IsIncluded(videoPath)
+	// if nil == err {
+	// 	return demandVideo, nil
+	// }
+
+	// // ffmpegJSON, err := tools.Execute(fmt.Sprintf("ffprobe -select_streams v \\\n-show_entries format=duration,size,bit_rate,filename \\\n-show_streams \\\n-v quiet \\\n-of csv=\"p=0\" \\\n-of json \\\n-i %s", videoPath))
+	// // if nil != err {
+	// // err = errors.New("获取ffmpeg信息失败")
+	// // return nil, err
+	// // }
+	// // demandVideo.FFmpegJSON = ffmpegJSON
+	// demandVideo.Path = videoPath
+	// demandVideo.Name = tools.GeneratorUUID()
+	// err = repositories.VideoRepository.Save(demandVideo)
+	return receive.ToString(), err
 }
 
 func (*videoLogic) FindVideoByTarget(videoType string, page, count int) *model.ListBody {
