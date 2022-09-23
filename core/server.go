@@ -73,7 +73,7 @@ func configCoreServer() {
 		aip.Party("/user").Handle(new(routes.UserRoute))
 		aip.Party("/dictionary").Handle(new(routes.DictionaryManagerRoute))
 		aip.Party("/video").Handle(new(routes.VideoRoute))
-		aip.Party("/meatdata").Handle(new(routes.FileMeatdataRoute))
+		aip.Party("/metadata").Handle(new(routes.FileMetadataRoute))
 	})
 }
 

@@ -4,12 +4,12 @@ var (
 	VideoLogic        *videoLogic
 	UserLogic         *userLogic
 	DictionaryLogic   *dictionaryLogic
-	FileMeatdataLogic *fileMeatdataLogic
+	FileMetadataLogic *fileMetadataLogic
 )
 
 func init() {
 	VideoLogic = &videoLogic{}
 	UserLogic = &userLogic{}
 	DictionaryLogic = &dictionaryLogic{}
-	FileMeatdataLogic = &fileMeatdataLogic{}
+	FileMetadataLogic = &fileMetadataLogic{}
 }

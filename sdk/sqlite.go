@@ -52,6 +52,7 @@ func (that *sqliteSDK) QueryOne(callback func(sql.Row), sqlStr string, args ...i
 
 // 查询多条
 func (that *sqliteSDK) Query(callback func(sql.Rows), sqlStr string, args ...interface{}) {
+	logrus.Debugf("执行SQL: %v -> %v", sqlStr, args)
 	if rows, err := that.instance.QueryContext(that.GetContext(), sqlStr, args...); nil != err {
 		logrus.Errorf("执行SQL出现异常: %v -> %v", sqlStr, args)
 	} else {
