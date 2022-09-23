@@ -3,9 +3,7 @@ package logic
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"strings"
 	"video_storage/config"
 	"video_storage/model"
 	"video_storage/repositories"
@@ -73,38 +71,5 @@ func (*videoLogic) FindVideoByTarget(videoType string, page, count int) *model.L
 	return &model.ListBody{
 		Total: totalNumber,
 		Data:  dataList,
-	}
-}
-
-func (*videoLogic) ScanVideo(path string) ([]*model.ScanFile, error) {
-	info, err := os.Stat(path)
-	if nil != err {
-		if os.IsNotExist(err) {
-			return nil, errors.New("文件目录不存在")
-		}
-	}
-	var videoList []*model.ScanFile
-	scanFile(path, info, &videoList)
-	return videoList, nil
-}
-
-func scanFile(path string, info os.FileInfo, list *[]*model.ScanFile) {
-	if info.IsDir() {
-		childItem, _ := ioutil.ReadDir(path)
-		for _, i := range childItem {
-			scanFile(path+"/"+i.Name(), i, list)
-		}
-	} else {
-		f := &model.ScanFile{
-			Name:       info.Name(),
-			Path:       path,
-			Mode:       info.Mode(),
-			Size:       info.Size(),
-			ModifyTime: tools.FormatTime(info.ModTime()),
-		}
-		if strings.Index(f.Name, ".") == 0 {
-			return
-		}
-		*list = append(*list, f)
 	}
 }
