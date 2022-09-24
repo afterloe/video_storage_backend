@@ -5,13 +5,13 @@ const (
 	CreateVideoTable = `
 CREATE TABLE IF NOT EXISTS "` + TableVideo + `" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	"metadata_id" INTEGER
+	"metadata_id" INTEGER,
 	"width"	INTEGER,
 	"height"	INTEGER,
 	"duration"	TEXT,
 	"codec_name"	TEXT,
 	"display_aspect_ratio" TEXT,
-	"codec_long_name"	TEXT
+	"codec_long_name"	TEXT,
 	"create_time"	TEXT,
 	"modify_time"	TEXT,
 	"is_del"	BLOB
