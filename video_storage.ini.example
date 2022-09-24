@@ -12,6 +12,7 @@ port = 10800
 [logic]
 sqlite_file = /var/lib/data/videoStorageBackend
 video_storage = /home/pi/www/storage
+screenshot = /home/pi/www/screenshot
 video_prefix = on-demand
 
 [db]

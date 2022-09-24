@@ -24,7 +24,7 @@ func (that *VideoRoute) GetAnalysisFile() *model.ResponseBody {
 	if file.IsDel {
 		return tools.Failed(404, "对象已经被删除")
 	}
-	info, err := logic.VideoLogic.Ffprobe(file.FullPath)
+	info, err := logic.VideoLogic.Ffprobe(file)
 	if nil != err {
 		return tools.Failed(403, err.Error())
 	}

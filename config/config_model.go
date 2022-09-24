@@ -19,6 +19,7 @@ type ApplicationConfig struct {
 		SoftwareWarehouse string `ini:"software_warehouse"` // 软件仓库位置
 		SQLiteFile        string `ini:"sqlite_file"`        // sqlite3 文件地址
 		VideoStorage      string `ini:"video_storage"`      // video存放的位置
+		Screenshot        string `ini:"screenshot"`         // 截图存放位置
 		VideoPrefix       string `ini:"video_prefix"`       // 点播视频前缀
 	} `ini:"logic"`
 }

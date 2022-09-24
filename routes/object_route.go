@@ -45,7 +45,7 @@ func (that *ObjectRoute) Put() *model.ResponseBody {
 		videoDescribe.CodecName = codecName
 		videoDescribe.Duration = duration
 		videoDescribe.CodecLongName = codecLongName
-		_ = logic.VideoLogic.SaveDescribe(videoDescribe)
+		_ = logic.VideoLogic.SaveDescribe(videoDescribe, fileMetadata)
 	}
 
 	return tools.Success(nil)

@@ -26,8 +26,8 @@ ___  _|__| __| _/____  ____     _______/  |_  ________________     ____   ____
   \_/ |__\____ |\___  >____/  /____  > |__|  \____/|__|  (____  /\___  / \___  >
               \/    \/             \/                         \//_____/      \/ 
 
-version:\t%s
-author:\tafterloe(605728727@qq.com)
+version: %s
+author: afterloe(605728727@qq.com)
 `, appVersion)
 
 	fmt.Println(startUpStr)
