@@ -64,11 +64,17 @@ func (that *videoLogic) Ffprobe(source *model.FileMetadata) (string, error) {
 	return receive.ToString(), err
 }
 
-func (*videoLogic) FindVideoByTarget(videoType string, page, count int) *model.ListBody {
-	// dataList := repositories.VideoRepository.GetList(count*page, count)
-	// totalNumber := repositories.VideoRepository.TotalCount()
-	return &model.ListBody{
-		Total: 0,
-		Data:  nil,
+func (*videoLogic) FindVideoByTarget(videoType string, page, count int) (*model.ListBody, error) {
+	videoType = strings.Trim(videoType, " ")
+	if videoType == "" {
+		return nil, errors.New("搜索内容不能为空")
 	}
+	if isOK, _ := regexp.MatchString("^[\u4E00-\u9FA5A-Za-z0-9_]+$", videoType); !isOK {
+		return nil, errors.New("输入的为非法字符")
+	}
+	dataList, total := repositories.VideoRepository.FindVideoListByTarget(videoType, count*page, count, false)
+	return &model.ListBody{
+		Total: total,
+		Data:  dataList,
+	}, nil
 }

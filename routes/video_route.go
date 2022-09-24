@@ -44,17 +44,6 @@ func (that *VideoRoute) GetPlayer() *model.ResponseBody {
 	}
 }
 
-// 上新
-// func (that *VideoRoute) PostFfmpeg() *model.ResponseBody {
-// 	videoPath := tools.FormValue(that.Ctx, "path")
-// 	video, err := logic.VideoLogic.FFmpeg(videoPath)
-// 	if nil != err {
-// 		return tools.Failed(400, err.Error())
-// 	} else {
-// 		return tools.Success(video)
-// 	}
-// }
-
 // 视频目录
 func (that *VideoRoute) GetList() *model.ResponseBody {
 	videoType := tools.FormValueDefault(that.Ctx, "type", "hot")
@@ -64,5 +53,9 @@ func (that *VideoRoute) GetList() *model.ResponseBody {
 	if page < 0 {
 		page = 0
 	}
-	return tools.Success(logic.VideoLogic.FindVideoByTarget(videoType, page, count))
+	list, err := logic.VideoLogic.FindVideoByTarget(videoType, page, count)
+	if nil != err {
+		return tools.Failed(400, err.Error())
+	}
+	return tools.Success(list)
 }

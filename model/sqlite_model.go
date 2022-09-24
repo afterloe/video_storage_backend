@@ -61,3 +61,16 @@ type FileMetadata struct {
 	IsDel      bool   `column:"is_del" json:"isDel"`           // 是否删除
 	IsLink     bool   `column:"is_link" json:"isLink"`         // 是否入库关联
 }
+
+type VideoDescribePackage struct {
+	ID                 int64  `column:"id" json:"id"`               // 唯一标识
+	FileName           string `column:"filename" json:"fileName"`   // 源文件名称
+	FileType           string `column:"file_type" json:"file_type"` // 源文件类型
+	FileSize           int64  `column:"file_size" json:"fileSize"`  // 源文件大小
+	VirtualPath        string `column:"virtual_path" json:"virtual_path"`
+	Duration           string `column:"duration" json:"duration"`                         // 视频时间
+	CodecName          string `column:"codec_name" json:"codec_name"`                     // 编码名称
+	Width              int64  `column:"width" json:"width"`                               // 视频宽度
+	Height             int64  `column:"height" json:"height"`                             // 视频高度
+	DisplayAspectRatio string `column:"display_aspect_ratio" json:"display_aspect_ratio"` // 播放比例
+}
