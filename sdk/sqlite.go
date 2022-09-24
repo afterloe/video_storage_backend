@@ -41,6 +41,7 @@ func (*sqliteSDK) GetContext() context.Context {
 
 // 查询一条
 func (that *sqliteSDK) QueryOne(callback func(sql.Row), sqlStr string, args ...interface{}) {
+	logrus.Debugf("执行SQL: %v -> %v", sqlStr, args)
 	if row := that.instance.QueryRowContext(that.GetContext(), sqlStr, args...); nil != row {
 		if nil != callback {
 			callback(*row)

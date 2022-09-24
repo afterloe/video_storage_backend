@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"errors"
 	"video_storage/model"
 	"video_storage/repositories/constants"
 	"video_storage/sdk"
@@ -68,4 +69,19 @@ func (*fileMetadataRepository) FindByKeyword(keyword string, start, count int, i
 		_ = row.Scan(&total)
 	}, constants.FindFileMetadataByKeywordCount, args...)
 	return metadataList, total
+}
+
+func (*fileMetadataRepository) Save(instance *model.FileMetadata) error {
+	if instance.ID == 0 {
+		return errors.New("当前版本不支持插入模式")
+	}
+	var err error
+	sdk.SQLiteSDK.Execute(func(r sql.Result) {
+		changeNumber, _ := r.RowsAffected()
+		if changeNumber == 0 {
+			err = errors.New("执行更新失败")
+		}
+	}, constants.UpdateFileMetadata, []interface{}{instance.IsLink, instance.IsDel, instance.ID}...)
+
+	return err
 }

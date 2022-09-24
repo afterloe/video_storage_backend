@@ -18,16 +18,14 @@ func (that *ObjectRoute) Put() *model.ResponseBody {
 		return tools.Failed(400, "源数据id无效")
 	}
 	fileMetadata, err := logic.FileMetadataLogic.FindByID(metadataID)
-	if fileMetadata.IsDel {
+	if fileMetadata.IsDel || nil != err {
 		return tools.Failed(404, "源数据已被删除")
 	}
-	object, err := logic.ObjectLogic.FindByID(metadataID)
-	if nil != err {
+	_, err = logic.ObjectLogic.FindByID(metadataID)
+	if nil == err {
 		return tools.Failed(400, "对象已入库")
 	}
-	object.MetadataID = metadataID
-	object.VirtualPath = fileMetadata.HexCode
-	err = logic.ObjectLogic.SaveObject(object, fileMetadata)
+	err = logic.ObjectLogic.SaveObject(fileMetadata)
 	if nil != err {
 		return tools.Failed(500, "对象入库失败")
 	}

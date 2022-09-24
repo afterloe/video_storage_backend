@@ -22,15 +22,24 @@ func (*objectLogic) FindByID(id int64) (*model.Object, error) {
 	return object, nil
 }
 
-func (*objectLogic) SaveObject(object *model.Object, source *model.FileMetadata) error {
+func (*objectLogic) SaveObject(source *model.FileMetadata) error {
+	object := &model.Object{}
+	object.IsDel = false
+	object.CreateTime = tools.GetTime()
+	object.ModifyTime = object.CreateTime
+	object.MetadataID = source.ID
+	object.VirtualPath = source.HexCode
 	fullPath := regexp.QuoteMeta(source.FullPath)
 	fullPath = strings.ReplaceAll(fullPath, " ", `\ `)
 	receive := tools.Execute("ln -s %s %s/%s", fullPath, config.Instance.Logic.VideoStorage, object.VirtualPath)
 	if receive.HasError() {
 		return receive.GetError()
 	}
-	object.IsDel = false
-	object.CreateTime = tools.GetTime()
-	object.ModifyTime = object.CreateTime
-	return repositories.ObjectRepository.Save(object)
+	err := repositories.ObjectRepository.Save(object)
+	if nil != err {
+		source.IsLink = true
+		err = repositories.FileMetadataRepository.Save(source)
+	}
+
+	return err
 }

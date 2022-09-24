@@ -19,4 +19,5 @@ const (
 	FindFileMetadataByID           = "SELECT id, hex_code, filename, file_type, file_size, create_time, fullpath, is_link, is_del FROM " + TableFileMetadata + " WHERE id = ?"
 	FindFileMetadataByKeyword      = "SELECT id, filename, file_type, file_size, create_time, fullpath, is_link FROM " + TableFileMetadata + " WHERE fullpath LIKE ? AND is_del = ? LIMIT ? OFFSET ?"
 	FindFileMetadataByKeywordCount = "SELECT count(1) FROM " + TableFileMetadata + " WHERE fullpath LIKE ? AND is_del = ?"
+	UpdateFileMetadata             = "UPDATE " + TableFileMetadata + " SET is_link = ?, is_del = ? WHERE id = ?"
 )
