@@ -39,16 +39,14 @@ func (that *receive) ToString(charsets ...string) string {
 func (that *receive) GetError() error {
 	if that.errMessage != "" {
 		fmt.Println("[ERROR]: Execute ", that.command)
+		fmt.Println("[ERROR]: Execute cmd info: ", that.errMessage)
 		return errors.New(that.errMessage)
 	}
 	return nil
 }
 
 func (that *receive) HasError() bool {
-	if that.errMessage != "" {
-		return true
-	}
-	return false
+	return that.errMessage != ""
 }
 
 func ExecuteWithOutError(command string, args ...interface{}) *receive {

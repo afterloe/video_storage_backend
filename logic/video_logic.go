@@ -29,7 +29,7 @@ func (*videoLogic) FetchFileRealPath(source *model.FileMetadata) (string, error)
 	videoPath = regexp.QuoteMeta(videoPath)
 	videoPath = strings.ReplaceAll(videoPath, " ", `\ `)
 	_, err := os.Stat(videoPath)
-	if os.IsNotExist(err) {
+	if os.IsExist(err) {
 		return "", errors.New("源文件不存在，请检查源文件或对源数据进行调整和修改")
 	}
 
@@ -45,7 +45,7 @@ func (that *videoLogic) SaveDescribe(info *model.VideoDescribe, source *model.Fi
 	info.CreateTime = tools.GetTime()
 	info.ModifyTime = info.CreateTime
 	// 截取第10秒的视频截图
-	receive := tools.Execute(constants.FfmpegCatch, "10", videoPath, fmt.Sprintf("%s/%s", config.Instance.Logic.Screenshot, source.HexCode))
+	receive := tools.ExecuteWithOutError(constants.FfmpegCatch, "10", videoPath, fmt.Sprintf("%s/%s", config.Instance.Logic.Screenshot, source.HexCode))
 	if receive.HasError() {
 		return receive.GetError()
 	}
